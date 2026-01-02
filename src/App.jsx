@@ -1,11 +1,13 @@
 import React from 'react'
 import "./App.css";
-import AppRoutes from './AppRoutes' // Import AppRoutes
+import AppRoutes from './AppRoutes'
+import { Toaster } from "react-hot-toast"
 
 function App() {
   return (
     <div className='text-base'>
-      <AppRoutes /> 
+      <AppRoutes />
+      <Toaster position="top-center" />
     </div>
   )
 }
