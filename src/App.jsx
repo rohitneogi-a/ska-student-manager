@@ -1,9 +1,11 @@
 import React from 'react'
+import "./App.css";
+import AppRoutes from './AppRoutes' // Import AppRoutes
 
 function App() {
   return (
     <div className='text-base'>
-      SKA 2026 Coming Soon!
+      <AppRoutes /> 
     </div>
   )
 }

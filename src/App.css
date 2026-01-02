@@ -1,0 +1,199 @@
+@import "tailwindcss";
+
+/* Inter: CSS class for a variable style */
+.inter {
+  font-family: "Inter", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 100 900; /* variable font range */
+  font-style: normal;
+}
+
+/* Lexend: CSS class for a variable style */
+.lexend {
+  font-family: "Lexend", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 100 900; /* variable font range */
+  font-style: normal;
+}
+
+/* Poppins: CSS class for a variable style */
+.poppins {
+  font-family: "Poppins", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 100 900; /* variable font range */
+  font-style: normal;
+}
+
+/* Nunito: CSS class for a variable style */
+.nunito {
+  font-family: "Nunito", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 200 1000; /* variable font range */
+  font-style: normal;
+}
+
+/* Merriweather: CSS class for a variable style */
+.merriweather {
+  font-family: "Merriweather", serif;
+  font-optical-sizing: auto;
+  font-weight: 300 900; /* variable font range */
+  font-style: normal;
+}
+
+/* Montserrat: CSS class for a variable style */
+.montserrat {
+  font-family: "Montserrat", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 100 900; /* variable font range */
+  font-style: normal;
+}
+
+/* Semantic font utility classes */
+.font-header-navbar {
+  font-family: "Montserrat", sans-serif;
+}
+
+.font-sidebar {
+  font-family: "Poppins", sans-serif;
+}
+
+.font-page-title {
+  font-family: "Lexend", sans-serif;
+}
+
+.font-table-form {
+  font-family: "Inter", sans-serif;
+}
+
+.font-alert-card {
+  font-family: "Nunito", sans-serif;
+}
+
+.font-long-text {
+  font-family: "Merriweather", serif;
+}
+
+
+/* Glass Card */
+.glass-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.light-mode .glass-card {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(38, 70, 83, 0.1);
+}
+
+/* Gradient Backgrounds */
+.gradient-bg {
+    background: linear-gradient(135deg, #264653 0%, #2a9d8f 100%);
+}
+
+.light-mode .gradient-bg {
+    background: linear-gradient(135deg, #e9f5f3 0%, #f5f5f5 100%);
+}
+
+/* Input Fields */
+.input-field {
+    transition: all 0.3s ease;
+}
+
+.input-field:focus {
+    transform: translateY(-2px);
+}
+
+.input-field.error {
+    border-color: #e76f51 !important;
+    animation: shake 0.4s ease-in-out;
+}
+
+/* Buttons */
+.btn-primary {
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(42, 157, 143, 0.3);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+/* Animations */
+.logo-animate {
+    animation: fadeInDown 0.6s ease-out;
+}
+
+.card-animate {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-10px); }
+    75% { transform: translateX(10px); }
+}
+
+/* Password Strength Bar */
+.strength-bar {
+    height: 4px;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+}
+
+/* Light Mode Text Colors */
+.light-mode {
+    color: #264653;
+}
+
+.light-mode .text-white {
+    color: #264653 !important;
+}
+
+.light-mode .text-gray-300 {
+    color: #666 !important;
+}
+
+.light-mode .text-gray-400 {
+    color: #888 !important;
+}
+
+/* Password Requirement States */
+.password-requirement {
+    transition: all 0.3s ease;
+}
+
+.password-requirement.met {
+    color: #2a9d8f;
+}
+
+.password-requirement.unmet {
+    color: #e76f51;
+}
