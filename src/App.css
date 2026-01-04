@@ -197,3 +197,57 @@
 .password-requirement.unmet {
     color: #e76f51;
 }
+
+ .glass {
+          background: rgba(255, 255, 255, 0.05);
+          backdrop-filter: blur(10px);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .gradient-bg {
+          background: linear-gradient(135deg, #264653 0%, #2a9d8f 100%);
+        }
+
+        .gradient-accent {
+          background: linear-gradient(135deg, #2a9d8f 0%, #e9c46a 100%);
+        }
+
+        .hero-gradient {
+          background: linear-gradient(135deg, #264653 0%, #2a9d8f 50%, #e9c46a 100%);
+          background-size: 200% 200%;
+          animation: gradientShift 8s ease infinite;
+        }
+
+        @keyframes gradientShift {
+          0% {
+            background-position: 0% 50%;
+          }
+          50% {
+            background-position: 100% 50%;
+          }
+          100% {
+            background-position: 0% 50%;
+          }
+        }
+
+        .glow-hover {
+          transition: all 0.3s ease;
+        }
+
+        .glow-hover:hover {
+          box-shadow: 0 0 30px rgba(42, 157, 143, 0.5);
+          transform: translateY(-2px);
+        }
+
+        .card-hover {
+          transition: all 0.3s ease;
+        }
+
+        .card-hover:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        html {
+          scroll-behavior: smooth;
+        }
