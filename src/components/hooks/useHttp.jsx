@@ -1,7 +1,7 @@
 // src/hooks/useHttp.jsx
 import { useState, useCallback } from "react";
 
-const API_BASE_URL = import.meta.env.VITE_BACKEND_URL || "https://mcqtestbackend.iem.edu.in";
+const API_BASE_URL = import.meta.env.VITE_BACKEND_URL || "https://ska-sfms-backend.onrender.com";
 // Example .env value:
 // VITE_BACKEND_URL="https://your-backend-url.com/api"
 
