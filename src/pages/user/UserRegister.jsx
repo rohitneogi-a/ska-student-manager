@@ -1,4 +1,6 @@
 import { useState, forwardRef } from "react";
+
+import RippleSpinner from  "../../components/common/RippleSpinner.jsx";
 import {
   Eye,
   EyeOff,
@@ -267,8 +269,14 @@ export default function RegistrationForm() {
           </div>
 
           {/* Registration Card */}
-          <div className="rounded-3xl p-8 backdrop-blur-md animate-in fade-in slide-in-from-bottom-10 duration-600 transition-all bg-white/70 border border-slate-200 card-animate  ">
-            <form onSubmit={handleSubmit}>
+          <div className="rounded-3xl p-8 backdrop-blur-md animate-in fade-in slide-in-from-bottom-10 duration-600 transition-all bg-white/70 border border-slate-200 card-animate  relative">
+            {/* Loader overlay */}
+            {loading && (
+              <div className="absolute inset-0 bg-white/80 flex justify-center items-center z-10 rounded-3xl">
+                <RippleSpinner size={148} color="hsl(173, 80%, 40%)" />
+              </div>
+            )}
+            <form onSubmit={handleSubmit} className={loading ? "pointer-events-none opacity-50" : ""}>
               {/* Full Name Input */}
               <div className="mb-5">
                 <label
