@@ -1,4 +1,3 @@
-
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import {
@@ -31,6 +30,7 @@ export default function LandingPage() {
   const navigate = useNavigate()
 
   const [isDarkMode, setIsDarkMode] = useState(true)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false) // NEW
 
   const toggleTheme = () => {
     setIsDarkMode(!isDarkMode)
@@ -82,10 +82,54 @@ export default function LandingPage() {
             </button>
           </div>
 
-          <button className="md:hidden">
+          <button className="md:hidden" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
             <Menu className="w-6 h-6" />
           </button>
         </nav>
+        {/* Mobile Menu */}
+        {mobileMenuOpen && (
+          <div
+            className={`md:hidden absolute top-full left-0 w-full z-50
+              ${isDarkMode
+                ? "bg-gray-900/90 text-white backdrop-blur-md"
+                : "bg-white text-gray-900 shadow-lg hover:shadow-xl  "
+              }`}
+          >
+            <div className="flex flex-col space-y-2 p-4">
+              <a href="#about" className="py-2 px-2 rounded hover:bg-cyan-700" onClick={() => setMobileMenuOpen(false)}>
+                About
+              </a>
+              <a href="#features" className="py-2 px-2 rounded hover:bg-cyan-700" onClick={() => setMobileMenuOpen(false)}>
+                Features
+              </a>
+              <a href="#security" className="py-2 px-2 rounded hover:bg-cyan-700" onClick={() => setMobileMenuOpen(false)}>
+                Security
+              </a>
+              <button
+                onClick={() => {
+                  toggleTheme();
+                  setMobileMenuOpen(false);
+                }}
+                className="py-2 px-2 rounded hover:bg-cyan-700 flex items-center"
+              >
+                {isDarkMode ? <Sun className="w-5 h-5 mr-2" /> : <Moon className="w-5 h-5 mr-2" />}
+                Toggle Theme
+              </button>
+              <a href="#login" className="py-2 px-2 rounded hover:bg-cyan-700" onClick={() => setMobileMenuOpen(false)}>
+                Login
+              </a>
+              <button
+                onClick={() => {
+                  navigate("/register");
+                  setMobileMenuOpen(false);
+                }}
+                className="py-2 px-2 rounded bg-gradient-to-br from-teal-500 to-yellow-500 text-white font-semibold"
+              >
+                Register
+              </button>
+            </div>
+          </div>
+        )}
       </header>
 
       {/* Hero Section */}
@@ -135,9 +179,10 @@ export default function LandingPage() {
               </div>
             </div>
           </div>
+          
         </div>
 
-        <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
+        <div className="absolute bottom-5 left-1/2 transform -translate-x-1/2 animate-bounce">
           <ChevronDown className="w-8 h-8 text-cyan-400" />
         </div>
       </section>
