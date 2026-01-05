@@ -25,6 +25,8 @@ import {
   User,
 } from "lucide-react"
 
+import Footer from "../../components/common/Footer.jsx"
+
 export default function LandingPage() {
 
   const navigate = useNavigate()
@@ -69,7 +71,7 @@ export default function LandingPage() {
               {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
             </button>
             <a
-              href="#login"
+              href="/login"
               className={`px-4 py-2 rounded-lg transition ${isDarkMode ? "hover:bg-white/10" : "hover:bg-gray-200"}`}
             >
               Login
@@ -115,7 +117,7 @@ export default function LandingPage() {
                 {isDarkMode ? <Sun className="w-5 h-5 mr-2" /> : <Moon className="w-5 h-5 mr-2" />}
                 Toggle Theme
               </button>
-              <a href="#login" className="py-2 px-2 rounded hover:bg-cyan-700" onClick={() => setMobileMenuOpen(false)}>
+              <a href="/login" className="py-2 px-2 rounded hover:bg-cyan-700" onClick={() => setMobileMenuOpen(false)}>
                 Login
               </a>
               <button
@@ -160,7 +162,9 @@ export default function LandingPage() {
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <button
-                  className={` font-page-title cursor-pointer px-8 py-4 rounded-xl glow-hover font-semibold text-lg flex items-center justify-center space-x-2 text-white ${isDarkMode ? "gradient-bg" : "bg-linear-to-br from-slate-700 to-teal-600"}`}
+                  className={` font-page-title cursor-pointer px-8 py-4 rounded-xl glow-hover font-semibold text-lg flex items-center justify-center space-x-2 text-white ${isDarkMode ? "gradient-bg" : "bg-linear-to-br from-slate-700 to-teal-600"}`
+                }
+                onClick={() => navigate("/login")}
                 >
                   <LogIn className="w-5 h-5" />
                   <span>Login</span>
@@ -454,6 +458,7 @@ export default function LandingPage() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
               <button
                 className={`cursor-pointer px-10 py-4 rounded-xl glow-hover font-semibold text-lg flex items-center justify-center space-x-2 text-white ${isDarkMode ? "gradient-bg" : "bg-linear-to-br from-slate-700 to-teal-600"}`}
+                onClick={() => navigate("/login")}
               >
                 <LogIn className="w-5 h-5" />
                 <span>Login</span>
@@ -471,16 +476,7 @@ export default function LandingPage() {
       </section>
 
       {/* Footer */}
-      <footer className={`py-8 ${isDarkMode ? "glass" : "bg-gray-100 border-t border-gray-200"}`}>
-        <div className="container mx-auto px-6 text-center">
-          <p className={isDarkMode ? "text-gray-400" : "text-gray-600"}>
-            © 2025–26 SKA Student Manager. All rights reserved.
-          </p>
-          <p className={`text-sm mt-2 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-            Secure · Transparent · Student-Centered
-          </p>
-        </div>
-      </footer>
+      <Footer/>
 
 
     </div>

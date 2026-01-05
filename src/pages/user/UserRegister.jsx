@@ -1,6 +1,6 @@
 import { useState, forwardRef } from "react";
 
-import RippleSpinner from  "../../components/common/RippleSpinner.jsx";
+import RippleSpinner from "../../components/common/RippleSpinner.jsx";
 import {
   Eye,
   EyeOff,
@@ -21,6 +21,8 @@ import toast from "react-hot-toast";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { format, parse } from "date-fns";
+import { useNavigate } from "react-router-dom";
+import Footer from "../../components/common/Footer.jsx";
 
 const passwordRequirements = {
   length: (password) => password.length >= 8,
@@ -65,6 +67,7 @@ const DateInput = forwardRef(
 );
 
 export default function RegistrationForm() {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     fullName: "",
     guardianName: "",
@@ -228,6 +231,8 @@ export default function RegistrationForm() {
         });
         setErrors({});
         setPasswordStrength(0);
+
+        navigate("/login");
       } else {
         // Show API error message if available, else fallback
         const errorMsg =
@@ -276,7 +281,10 @@ export default function RegistrationForm() {
                 <RippleSpinner size={148} color="hsl(173, 80%, 40%)" />
               </div>
             )}
-            <form onSubmit={handleSubmit} className={loading ? "pointer-events-none opacity-50" : ""}>
+            <form
+              onSubmit={handleSubmit}
+              className={loading ? "pointer-events-none opacity-50" : ""}
+            >
               {/* Full Name Input */}
               <div className="mb-5">
                 <label
@@ -408,7 +416,10 @@ export default function RegistrationForm() {
                   Subject
                 </label>
                 <div className="relative">
-                <MdOutlineDraw   size={20} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500" />
+                  <MdOutlineDraw
+                    size={20}
+                    className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500"
+                  />
                   <input
                     type="text"
                     id="subject"
@@ -435,7 +446,10 @@ export default function RegistrationForm() {
                   Address
                 </label>
                 <div className="relative">
-                <MapPinHouse  size={20} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500" />
+                  <MapPinHouse
+                    size={20}
+                    className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500"
+                  />
                   <input
                     type="text"
                     id="address"
@@ -632,7 +646,7 @@ export default function RegistrationForm() {
                   Already have an account?
                 </span>
                 <a
-                  href="#"
+                  href="/login"
                   className="ml-1 font-semibold hover:underline transition-all text-amber-400"
                 >
                   Sign In
@@ -642,9 +656,9 @@ export default function RegistrationForm() {
           </div>
 
           {/* Footer */}
-          <div className="text-center mt-8 text-sm text-white/80">
-            <p>© 2026 Sreejoni Kala Academy. All rights reserved.</p>
-          </div>
+          <div className="mt-8">
+            <Footer />  
+            </div>
         </div>
       </div>
     </div>
