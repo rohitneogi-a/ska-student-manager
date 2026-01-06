@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { AlertCircle, AtSign, Eye, EyeOff, Lock, LockIcon } from "lucide-react"; // EyeOff imported here
+import { AtSign, Eye, EyeOff, Lock, LockIcon } from "lucide-react";
 import Footer from "../../components/common/Footer.jsx";
-import RippleSpinner from "../../components/common/RippleSpinner.jsx";
 import { useNavigate } from "react-router-dom";
 import { useHttp } from "../../components/hooks/useHttp.jsx";
-import toast from "react-hot-toast"; // <-- import toast
+import toast from "react-hot-toast";
+import { useLogin } from "../../contexts/LoginContext.jsx";
 
 export default function SignInForm() {
   const navigate = useNavigate();
@@ -12,6 +12,7 @@ export default function SignInForm() {
   const [phoneNo, setPhoneNo] = useState("");
   const [password, setPassword] = useState("");
   const { post } = useHttp();
+  const { refreshRole } = useLogin();
 
   const togglePassword = () => {
     setShowPassword(!showPassword);
@@ -20,20 +21,28 @@ export default function SignInForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const toastId = toast.loading("Signing in..."); // show loading toast
+    const toastId = toast.loading("Signing in...");
 
     const result = await post("/api/user/login", {
       phoneNo,
       password,
     });
 
-    toast.dismiss(toastId); // remove loading toast
+    toast.dismiss(toastId);
 
     if (result?.success) {
+      if (result.data?.accessToken) {
+        // Save token to localStorage
+        localStorage.setItem("Token", result.data.accessToken);
+
+        // Refresh role in context (this also sets it in localStorage)
+        refreshRole();
+      }
+
       toast.success("Login successful!");
       setPhoneNo("");
       setPassword("");
-      navigate("/dashboard"); // Uncomment if you want to redirect
+      navigate("/dashboard");
     } else {
       toast.error(result?.message || "Login failed.");
     }
@@ -48,12 +57,11 @@ export default function SignInForm() {
             <div className="inline-flex items-center justify-center w-20 h-20 rounded-3xl glass-card mb-4">
               <Lock className="w-10 h-10 text-white" strokeWidth={2} />
             </div>
-            <h1 className="text-3xl font-bold text-white mb-2">Welcome Back</h1>
+            <h1 className="text-3xl font-bold text-white mb-2">
+              Welcome Back
+            </h1>
             <p className="text-gray-300">Sign in to continue to your account</p>
           </div>
-
-          {/* Loading Spinner above the form */}
-          {/* You can show a spinner here if you want, but react-hot-toast handles loading feedback */}
 
           {/* Sign In Card */}
           <div className="glass-card rounded-3xl p-8 card-animate">
@@ -77,7 +85,7 @@ export default function SignInForm() {
                     value={phoneNo}
                     onChange={(e) =>
                       setPhoneNo(e.target.value.replace(/\D/g, ""))
-                    } // Only digits
+                    }
                     required
                     pattern="[0-9]*"
                     inputMode="numeric"

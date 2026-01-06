@@ -2,11 +2,21 @@
 import { useState, useCallback } from "react";
 
 const API_BASE_URL = import.meta.env.VITE_BACKEND_URL || "https://ska-sfms-backend.onrender.com";
-// Example .env value:
-// VITE_BACKEND_URL="https://your-backend-url.com/api"
+
+// Utility function to get token from storage
+export const getToken = () => {
+  // Try to get token from localStorage (your current implementation uses localStorage)
+  const token = localStorage.getItem("Token");
+
+  // Basic token format validation
+  if (token && typeof token === 'string' && token.length > 10) {
+    return token;
+  }
+
+  return null;
+};
 
 export const useHttp = () => {
-  
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -22,6 +32,12 @@ export const useHttp = () => {
             ...headers,
           },
         };
+
+        // Automatically add token to headers if available
+        const token = getToken();
+        if (token) {
+          config.headers["Authorization"] = `Bearer ${token}`;
+        }
 
         if (body) {
           if (body instanceof FormData) {
