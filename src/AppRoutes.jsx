@@ -6,6 +6,8 @@ import UserDashboard from "./pages/user/UserDashboard";
 import ProtectedRoute from "./components/common/ProtectedRoute.jsx";
 import { useLogin } from "./contexts/LoginContext.jsx";
 import UserProfile from "./pages/user/UserProfile.jsx";
+import AdminLogin from "./pages/admin/AdminLogin.jsx";
+import AdminDashboard from "./pages/admin/AdminDashboard.jsx";
 
 function LoginRoute() {
   const { role } = useLogin();
@@ -14,8 +16,22 @@ function LoginRoute() {
   if (token && role === "user") {
     return <Navigate to="/dashboard" replace />;
   }
+  if (token && role === "admin") {
+    return <Navigate to="/admin/dashboard" replace />;
+  }
 
   return <UserLogin />;
+}
+
+function AdminLoginRoute() {
+  const { role } = useLogin();
+  const token = localStorage.getItem("Token");
+
+  if (token && role === "admin") {
+    return <Navigate to="/admin/dashboard" replace />;
+  }
+
+  return <AdminLogin />;
 }
 
 function HomeRoute() {
@@ -24,6 +40,9 @@ function HomeRoute() {
 
   if (token && role === "user") {
     return <Navigate to="/dashboard" replace />;
+  }
+  if (token && role === "admin") {
+    return <Navigate to="/admin/dashboard" replace />;
   }
 
   return <LandingPage />;
@@ -35,12 +54,12 @@ export default function AppRoutes() {
       <Route path="/" element={<HomeRoute />} />
       <Route path="/register" element={<UserRegister />} />
       <Route path="/login" element={<LoginRoute />} />
+      <Route path="/admin/login" element={<AdminLoginRoute />} />
       <Route
         path="/dashboard"
         element={
           <ProtectedRoute allowedRoles={["user"]}>
             <UserDashboard />
-            
           </ProtectedRoute>
         }
       />
@@ -49,7 +68,14 @@ export default function AppRoutes() {
         element={
           <ProtectedRoute allowedRoles={["user"]}>
             <UserProfile />
-            
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/dashboard"
+        element={
+          <ProtectedRoute allowedRoles={["admin"]}>
+            <AdminDashboard />
           </ProtectedRoute>
         }
       />

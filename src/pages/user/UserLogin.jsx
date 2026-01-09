@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { AtSign, Eye, EyeOff, Lock, LockIcon } from "lucide-react";
+import { AtSign, Eye, EyeOff, Lock, LockIcon, Smartphone } from "lucide-react";
 import Footer from "../../components/common/Footer.jsx";
 import { useNavigate } from "react-router-dom";
 import { useHttp } from "../../components/hooks/useHttp.jsx";
@@ -75,7 +75,7 @@ export default function SignInForm() {
                   Phone Number
                 </label>
                 <div className="relative">
-                  <AtSign
+                  <Smartphone 
                     className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none z-10"
                     strokeWidth={2}
                   />
