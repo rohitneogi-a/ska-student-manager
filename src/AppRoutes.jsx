@@ -8,6 +8,7 @@ import { useLogin } from "./contexts/LoginContext.jsx";
 import UserProfile from "./pages/user/UserProfile.jsx";
 import AdminLogin from "./pages/admin/AdminLogin.jsx";
 import AdminDashboard from "./pages/admin/AdminDashboard.jsx";
+import AdminProfile from "./pages/admin/AdminProfile.jsx";
 
 function LoginRoute() {
   const { role } = useLogin();
@@ -29,6 +30,9 @@ function AdminLoginRoute() {
 
   if (token && role === "admin") {
     return <Navigate to="/admin/dashboard" replace />;
+  }
+  if (token && role === "user") {
+    return <Navigate to="/dashboard" replace />;
   }
 
   return <AdminLogin />;
@@ -76,6 +80,14 @@ export default function AppRoutes() {
         element={
           <ProtectedRoute allowedRoles={["admin"]}>
             <AdminDashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/profile"
+        element={
+          <ProtectedRoute allowedRoles={["admin"]}>
+            <AdminProfile />
           </ProtectedRoute>
         }
       />

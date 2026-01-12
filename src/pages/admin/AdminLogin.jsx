@@ -58,7 +58,7 @@ export default function AdminLogin() {
               <Lock className="w-10 h-10 text-white" strokeWidth={2} />
             </div>
             <h1 className="text-3xl font-bold text-white mb-2">
-              Welcome Back
+              Welcome Back Admin
             </h1>
             <p className="text-gray-300">Sign in to continue to your account</p>
           </div>
