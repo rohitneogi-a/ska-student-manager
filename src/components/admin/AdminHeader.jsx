@@ -25,7 +25,7 @@ function UserHeader() {
   }
 
   return (
-    <header className="font-header-navbar fixed top-0 w-full z-50 bg-gradient-to-br from-[#dbe7e4]/70 via-[#c7e3dc]/70 to-[#dbe7e4]/70 backdrop-blur-xl backdrop-saturate-150 border-b border-white/30 shadow-lg shadow-black/5">
+    <header className="font-header-navbar fixed top-0 w-full z-50 bg-linear-to-br from-[#dbe7e4]/70 via-[#c7e3dc]/70 to-[#dbe7e4]/70 backdrop-blur-xl backdrop-saturate-150 border-b border-white/30 shadow-lg shadow-black/5">
       <nav className="container mx-auto px-6 py-4 flex items-center justify-between text-slate-800">
 
         {/* Logo */}
@@ -86,7 +86,7 @@ function UserHeader() {
         <div
           className="
             md:hidden absolute top-full left-0 w-full z-50
-            bg-gradient-to-br from-teal-900/90 via-cyan-900/90 to-teal-900/90
+            bg-linear-to-br from-teal-900/90 via-cyan-900/90 to-teal-900/90
             backdrop-blur-xl backdrop-saturate-150
             border-t border-white/20
             shadow-xl
@@ -118,7 +118,7 @@ function UserHeader() {
               }}
               className="
                 py-2 px-3 rounded-lg
-                bg-gradient-to-br from-teal-500 to-cyan-500
+                bg-linear-to-br from-teal-500 to-cyan-500
                 text-white font-semibold shadow-md
               "
             >
