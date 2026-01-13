@@ -1,9 +1,8 @@
-import React, { useState } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom' // <-- add useLocation
-import { GraduationCap, Menu, LogOut } from 'lucide-react'
+import React, { useState, useEffect } from 'react'
+import { useNavigate, useLocation } from 'react-router-dom'
+import { GraduationCap, Menu, LogOut, X } from 'lucide-react'
 import toast from 'react-hot-toast'
 
-// Menu items data
 const menuItems = [
   ["DashBoard", "/admin/dashboard"],
   ["Moderators", "/moderators"],
@@ -15,7 +14,7 @@ const menuItems = [
 function AdminHeader() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const navigate = useNavigate()
-  const location = useLocation() // <-- get current location
+  const location = useLocation()
 
   const handleLogout = () => {
     localStorage.removeItem("Token")
@@ -24,110 +23,103 @@ function AdminHeader() {
     navigate("/login")
   }
 
+  /* Close mobile menu on resize (tablet → desktop) */
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 1024) setMobileMenuOpen(false)
+    }
+    window.addEventListener("resize", handleResize)
+    return () => window.removeEventListener("resize", handleResize)
+  }, [])
+
   return (
-    <header className="font-header-navbar fixed top-0 w-full z-50 bg-linear-to-br from-[#dbe7e4]/70 via-[#c7e3dc]/70 to-[#dbe7e4]/70 backdrop-blur-xl backdrop-saturate-150 border-b border-white/30 shadow-lg shadow-black/5">
-      <nav className="container mx-auto px-6 py-4 flex items-center justify-between text-slate-800">
+    <header className="font-header-navbar fixed top-0 w-full z-50 bg-linear-to-br from-[#dbe7e4]/70 via-[#c7e3dc]/70 to-[#dbe7e4]/70 backdrop-blur-xl border-b border-white/30 shadow-md">
+      <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between text-slate-800">
 
         {/* Logo */}
         <div
-          className="flex items-center space-x-2 cursor-pointer"
+          className="flex items-center gap-2 cursor-pointer"
           onClick={() => navigate("/admin/dashboard")}
         >
           <div className="w-10 h-10 rounded-xl flex items-center justify-center text-white gradient-accent shadow-md">
             <GraduationCap className="w-6 h-6" />
           </div>
-          <span className="text-xl font-bold">SKA Manager</span>
+          <span className="text-lg sm:text-xl font-bold">
+            SKA Manager
+          </span>
         </div>
 
-        {/* Desktop Menu */}
-        <div className="hidden md:flex items-center space-x-8">
+        {/* Desktop Menu (large screens only) */}
+        <div className="hidden lg:flex items-center gap-2">
           {menuItems.map(([label, path]) => (
             <button
               key={label}
               onClick={() => navigate(path)}
-              className={
-                `transition cursor-pointer px-4 py-2 rounded-2xl font-semibold flex items-center gap-2
+              className={`px-4 py-2 rounded-xl font-semibold transition
                 ${location.pathname === path
-                  ? "bg-white/30 backdrop-blur-md border border-white/40 hover:bg-white/50 hover:scale-105 text-cyan-700"
-                  : "hover:text-cyan-500"}`
-              }
+                  ? "bg-white/40 text-cyan-700 border border-white/40"
+                  : "hover:text-cyan-500"}
+              `}
             >
               {label}
             </button>
           ))}
 
-          {/* Logout */}
           <button
             onClick={handleLogout}
-            className="
-              px-4 py-2 rounded-2xl font-semibold
-              flex items-center gap-2
-              bg-white/30 backdrop-blur-md
-              border border-white/40
-              hover:bg-white/50 hover:scale-105
-              transition cursor-pointer
-            "
+            className="px-4 py-2 rounded-xl font-semibold flex items-center gap-2
+              bg-white/30 border border-white/40 hover:bg-white/50 transition"
           >
-            <LogOut className="w-5 h-5" /> Logout
+            <LogOut className="w-5 h-5" />
+            Logout
           </button>
         </div>
 
-        {/* Mobile Menu Button */}
+        {/* Mobile / Tablet Menu Button */}
         <button
-          className="md:hidden p-2 rounded-lg hover:bg-white/30 transition"
+          className="lg:hidden p-2 rounded-lg hover:bg-white/30 transition"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
         >
-          <Menu className="w-6 h-6" />
+          {mobileMenuOpen ? <X /> : <Menu />}
         </button>
       </nav>
 
-      {/* Mobile Menu */}
-      {mobileMenuOpen && (
-        <div
-          className="
-            md:hidden absolute top-full left-0 w-full z-50
-            bg-linear-to-br from-teal-900/90 via-cyan-900/90 to-teal-900/90
-            backdrop-blur-xl backdrop-saturate-150
-            border-t border-white/20
-            shadow-xl
-          "
-        >
-          <div className="flex flex-col space-y-2 p-4 text-white">
-            {menuItems.map(([label, path]) => (
-              <button
-                key={label}
-                onClick={() => {
-                  navigate(path)
-                  setMobileMenuOpen(false)
-                }}
-                className={
-                  `py-2 px-3 rounded-lg transition text-left
-                  ${location.pathname === path
-                    ? "bg-white/30 backdrop-blur-md border border-white/40 text-cyan-200"
-                    : "hover:bg-white/15"}`
-                }
-              >
-                {label}
-              </button>
-            ))}
-
+      {/* Mobile / Tablet Dropdown Menu */}
+      <div
+        className={`lg:hidden absolute left-0 w-full bg-teal-900/95 backdrop-blur-xl
+          transition-all duration-300 overflow-hidden
+          ${mobileMenuOpen ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"}
+        `}
+      >
+        <div className="flex flex-col gap-2 p-4 text-white">
+          {menuItems.map(([label, path]) => (
             <button
+              key={label}
               onClick={() => {
-                handleLogout()
+                navigate(path)
                 setMobileMenuOpen(false)
               }}
-              className="
-                py-2 px-3 rounded-lg
-                bg-linear-to-br from-teal-500 to-cyan-500
-                text-white font-semibold shadow-md
-              "
+              className={`py-3 px-4 rounded-lg text-left text-base transition
+                ${location.pathname === path
+                  ? "bg-white/30 border border-white/40"
+                  : "hover:bg-white/10"}
+              `}
             >
-              Logout
+              {label}
             </button>
-          </div>
-        </div>
-      )}
+          ))}
 
+          <button
+            onClick={() => {
+              handleLogout()
+              setMobileMenuOpen(false)
+            }}
+            className="mt-2 py-3 px-4 rounded-lg bg-cyan-500 text-white font-semibold"
+          >
+            Logout
+          </button>
+        </div>
+      </div>
     </header>
   )
 }

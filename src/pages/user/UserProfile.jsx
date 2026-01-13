@@ -13,6 +13,7 @@ import { useNavigate } from "react-router-dom"
 import toast from "react-hot-toast"
 import UserLayout from "../../layouts/UserLayout"
 import RippleSpinner from "../../components/common/RippleSpinner"
+import Footertxt from "../../components/common/Footertxt"
 
 export default function UserProfile() {
   const [toastMsg, setToastMsg] = useState(null)
@@ -163,6 +164,7 @@ export default function UserProfile() {
           </div>
         )}
       </div>
+      
     </UserLayout>
   )
 }
@@ -183,5 +185,6 @@ function InfoItem({ icon, iconBg, label, value, onCopy }) {
         </button>
       )}
     </div>
+    
   )
 }
