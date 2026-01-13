@@ -56,7 +56,7 @@ function UserHeader() {
               className={`px-4 py-2 rounded-xl font-semibold transition
                 ${location.pathname === path
                   ? "bg-white/40 text-cyan-700 border border-white/40"
-                  : "hover:text-cyan-500"}
+                  : "hover:text-cyan-500 cursor-pointer"}
               `}
             >
               {label}
@@ -66,7 +66,7 @@ function UserHeader() {
           <button
             onClick={handleLogout}
             className="px-4 py-2 rounded-xl font-semibold flex items-center gap-2
-              bg-white/30 border border-white/40 hover:bg-white/50 transition"
+              bg-white/30 border border-white/40 hover:bg-white/50 transition cursor-pointer"
           >
             <LogOut className="w-5 h-5" />
             Logout
@@ -75,7 +75,7 @@ function UserHeader() {
 
         {/* Mobile / Tablet Menu Button */}
         <button
-          className="lg:hidden p-2 rounded-lg hover:bg-white/30 transition"
+          className="lg:hidden p-2 rounded-lg hover:bg-white/30 transition cursor-pointer"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
         >
           {mobileMenuOpen ? <X /> : <Menu />}

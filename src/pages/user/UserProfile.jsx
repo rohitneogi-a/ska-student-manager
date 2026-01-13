@@ -63,10 +63,10 @@ export default function UserProfile() {
   if (loading || !userData) {
     return (
       <UserLayout>
-        <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-[#264653] via-[#2a9d8f] to-[#264653]">
+        <div className="min-h-screen flex items-center justify-center p-4 ">
           <div className="text-center">
             <RippleSpinner size={148} color="hsl(173, 80%, 40%)" />
-            <p className="text-xl mt-4">Loading profile...</p>
+            
           </div>
         </div>
       </UserLayout>
@@ -93,7 +93,7 @@ export default function UserProfile() {
 
   return (
     <UserLayout>
-      <div className="min-h-screen flex items-center justify-center relative overflow-hidden font-alert-card bg-linear-to-br from-[#e6f1ef] via-[#d4ede8] to-[#e6f1ef] px-4 md:px-8 lg:px-16">
+      <div className="min-h-screen flex items-center justify-center relative overflow-hidden font-alert-card  px-2 md:px-8 lg:px-16">
 
         {/* Background Orbs */}
         <div className="fixed top-0 left-0 w-full h-full overflow-hidden z-0 pointer-events-none">
@@ -154,7 +154,7 @@ export default function UserProfile() {
               <Edit className="w-5 h-5 md:w-6 md:h-6" /> Edit Profile
             </button>
           </div>
-
+          
         </div>
 
         {/* Toast */}
@@ -164,7 +164,7 @@ export default function UserProfile() {
           </div>
         )}
       </div>
-      
+      <Footertxt />
     </UserLayout>
   )
 }
