@@ -4,14 +4,15 @@ import { useLogin } from "../../contexts/LoginContext.jsx";
 export default function ProtectedRoute({ children, allowedRoles }) {
   const { role } = useLogin();
   const token = localStorage.getItem("Token");
-  const storedRole = localStorage.getItem("Role"); // Get role from localStorage
+  const storedRole = localStorage.getItem("Role");
 
-  // Use stored role as fallback if context role isn't available yet
-  const effectiveRole = role || storedRole;
+  // Normalize roles to lowercase for comparison
+  const effectiveRole = (role || storedRole || "").toLowerCase();
+  const normalizedAllowedRoles = allowedRoles.map(r => r.toLowerCase());
 
-  if (!token || !effectiveRole || !allowedRoles.includes(effectiveRole)) {
+  if (!token || !effectiveRole || !normalizedAllowedRoles.includes(effectiveRole)) {
     return <Navigate to="/login" replace />;
   }
-  
+
   return children;
 }

@@ -12,7 +12,7 @@ const menuItems = [
   ["Payments", "/payments"],
 ]
 
-function UserHeader() {
+function AdminHeader() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const navigate = useNavigate()
   const location = useLocation() // <-- get current location
@@ -132,4 +132,4 @@ function UserHeader() {
   )
 }
 
-export default UserHeader
+export default AdminHeader

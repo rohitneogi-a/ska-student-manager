@@ -114,7 +114,9 @@ export default function AdminProfile() {
               </div>
             </div>
             <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-2 flex items-center justify-center gap-2 text-gray-900">
-              {name}<CheckCircle className="w-4 h-4 md:w-5 md:h-5 text-[#0e3632]" />
+              {name}<div className="inline-flex items-center justify-center rounded-2xl bg-green-300/20 p-1">
+  <CheckCircle className="w-4 h-4 md:w-5 md:h-5 text-[#0e3632]" />
+</div>
             </h1>
           </div>
 

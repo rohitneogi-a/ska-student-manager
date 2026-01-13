@@ -1,6 +1,6 @@
 import React from 'react'
+import AdminLayout from "../../layouts/AdminLayout";
 
-import AdminLayout from '../../layouts/AdminLayout'
 import {
   Users,
   UserCheck,
