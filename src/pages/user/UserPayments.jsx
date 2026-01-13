@@ -58,7 +58,7 @@ function UserPayments() {
               {salaryHistory.map((record, idx) => (
                 <div
                   key={idx}
-                  className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 p-3 sm:p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition card-hover  "
+                  className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 p-3 sm:p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition card-hover card-animate "
                 >
                   <div className="flex-1 min-w-0">
                     <h4 className="text-sm sm:text-base font-semibold text-gray-900 truncate">
