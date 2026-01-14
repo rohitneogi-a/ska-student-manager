@@ -116,7 +116,7 @@ export default function ManageModerators() {
         {/* Main Content */}
         <div className="px-4 mt-4 font-page-title">
           {/* Page Header */}
-          <div className="mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div className="mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4 pl-4 ">
             <div>
               <h2 className="text-3xl font-bold text-slate-800">Moderators</h2>
               <p className="text-gray-600">
