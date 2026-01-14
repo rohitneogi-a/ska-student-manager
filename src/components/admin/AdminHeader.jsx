@@ -5,10 +5,10 @@ import toast from 'react-hot-toast'
 
 const menuItems = [
   ["DashBoard", "/admin/dashboard"],
-  ["Moderators", "/moderators"],
+  ["Moderators", "/admin/moderators"],
+  ["Manage Users", "/admin/manage-users"],
   ["Profile", "/admin/profile"],
-  ["Settings", "/settings"],
-  ["Payments", "/payments"],
+  ["Settings", "/admin/settings"],
 ]
 
 function AdminHeader() {
@@ -20,7 +20,7 @@ function AdminHeader() {
     localStorage.removeItem("Token")
     localStorage.removeItem("Role")
     toast.success("Logged out successfully")
-    navigate("/login")
+    navigate("/admin/login")
   }
 
   /* Close mobile menu on resize (tablet → desktop) */

@@ -65,7 +65,7 @@ export default function AdminProfile() {
         <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-[#264653] via-[#2a9d8f] to-[#264653]">
           <div className="text-center">
             <RippleSpinner size={148} color="hsl(173, 80%, 40%)" />
-            <p className="text-xl mt-4">Loading profile...</p>
+            
           </div>
         </div>
       </AdminLayout>
