@@ -5,7 +5,6 @@ const Footer = () => {
       <p className="text-sm mt-2">
         Secure · Transparent · Student-Centered
       </p>
-      <p>Developed By Sreejoni Kala Academy</p>
     </footer>
   );
 };

@@ -4,6 +4,7 @@ import AdminLayout from "../../layouts/AdminLayout";
 import { useHttp } from "../../components/hooks/useHttp";
 import RippleSpinner from "../../components/common/RippleSpinner";
 import StatusDot from "../../components/common/StatusDot";
+import Footertxt from "../../components/common/Footertxt";
 
 export default function ManageModerators() {
   const { get, loading, error } = useHttp();
@@ -110,8 +111,38 @@ export default function ManageModerators() {
       .toUpperCase();
   };
 
+  const getStatusColor = (status) => {
+    switch (status) {
+      case "active":
+        return "bg-[rgba(42,157,143,0.1)] text-[#2a9d8f]";
+      case "inactive":
+        return "bg-[rgba(231,111,81,0.1)] text-[#e76f51]";
+      case "suspended":
+        return "bg-[rgba(233,196,106,0.2)] text-[#e9c46a]";
+      default:
+        return "";
+    }
+  };
+
+  const getStatusDotColor = (status) => {
+    switch (status) {
+      case "active":
+        return "bg-teal-500";
+      case "inactive":
+        return "bg-red-500";
+      case "suspended":
+        return "bg-yellow-500";
+      default:
+        return "bg-gray-500";
+    }
+  };
+
   return (
     <AdminLayout>
+
+        <div>
+
+
       <div className="min-h-screen ">
         {/* Main Content */}
         <div className="px-4 mt-4 font-page-title">
@@ -164,7 +195,7 @@ export default function ManageModerators() {
               >
                 {/* Moderator Header */}
                 <div className="mb-5 flex items-center gap-4">
-                  <div className="h-15 w-15 rounded-full bg-gradient-to-br from-teal-500 to-yellow-400 flex items-center justify-center text-white font-bold text-lg">
+                  <div className="h-15 w-15 rounded-full bg-linear-to-br from-teal-500 to-yellow-400 flex items-center justify-center text-white font-bold text-lg">
                     {getAvatarInitials(mod.name)}
                   </div>
                   <div>
@@ -196,19 +227,13 @@ export default function ManageModerators() {
                     <span className="text-sm text-gray-500">Status</span>
                     <div className="flex items-center gap-2">
                       <StatusDot
-                        pingColor={
-                          mod.status === "active" ? "bg-teal-500" : "bg-red-500"
-                        }
-                        dotColor={
-                          mod.status === "active" ? "bg-teal-500" : "bg-red-500"
-                        }
+                        pingColor={getStatusDotColor(mod.status)}
+                        dotColor={getStatusDotColor(mod.status)}
                       />
                       <span
-                        className={`text-xs font-semibold ${
-                          mod.status === "active"
-                            ? "text-teal-700"
-                            : "text-red-700"
-                        }`}
+                        className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${getStatusColor(
+                          mod.status
+                        )}`}
                       >
                         {mod.status ? mod.status.toUpperCase() : "UNKNOWN"}
                       </span>
@@ -238,152 +263,9 @@ export default function ManageModerators() {
           </div>
         </div>
 
-        {/* Add/Edit Modal */}
-        {isModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-            <div className="w-full max-w-md rounded-xl bg-white p-8 shadow-xl">
-              <h2 className="mb-6 text-2xl font-bold text-slate-800">
-                {editingId ? "Edit Moderator" : "Add New Moderator"}
-              </h2>
-
-              <form onSubmit={handleSubmitForm} className="space-y-5">
-                <div>
-                  <label className="mb-2 block text-sm font-semibold text-slate-800">
-                    Full Name
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={formData.name}
-                    onChange={(e) =>
-                      setFormData({ ...formData, name: e.target.value })
-                    }
-                    className="w-full rounded-lg border-2 border-gray-200 px-4 py-2.5 text-sm focus:border-teal-500 focus:outline-none"
-                  />
-                </div>
-
-                <div>
-                  <label className="mb-2 block text-sm font-semibold text-slate-800">
-                    Email Address
-                  </label>
-                  <input
-                    type="email"
-                    required
-                    value={formData.email}
-                    onChange={(e) =>
-                      setFormData({ ...formData, email: e.target.value })
-                    }
-                    className="w-full rounded-lg border-2 border-gray-200 px-4 py-2.5 text-sm focus:border-teal-500 focus:outline-none"
-                  />
-                </div>
-
-                <div>
-                  <label className="mb-2 block text-sm font-semibold text-slate-800">
-                    Phone Number
-                  </label>
-                  <input
-                    type="tel"
-                    required
-                    value={formData.phone}
-                    onChange={(e) =>
-                      setFormData({ ...formData, phone: e.target.value })
-                    }
-                    className="w-full rounded-lg border-2 border-gray-200 px-4 py-2.5 text-sm focus:border-teal-500 focus:outline-none"
-                  />
-                </div>
-
-                <div>
-                  <label className="mb-2 block text-sm font-semibold text-slate-800">
-                    Department
-                  </label>
-                  <select
-                    required
-                    value={formData.dept}
-                    onChange={(e) =>
-                      setFormData({ ...formData, dept: e.target.value })
-                    }
-                    className="w-full rounded-lg border-2 border-gray-200 px-4 py-2.5 text-sm focus:border-teal-500 focus:outline-none"
-                  >
-                    <option value="">Select Department</option>
-                    <option value="Support">Support</option>
-                    <option value="Sales">Sales</option>
-                    <option value="Operations">Operations</option>
-                    <option value="Technical">Technical</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="mb-2 block text-sm font-semibold text-slate-800">
-                    Status
-                  </label>
-                  <select
-                    required
-                    value={formData.status}
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        status: e.target.value,
-                      })
-                    }
-                    className="w-full rounded-lg border-2 border-gray-200 px-4 py-2.5 text-sm focus:border-teal-500 focus:outline-none"
-                  >
-                    <option value="active">Active</option>
-                    <option value="inactive">Inactive</option>
-                  </select>
-                </div>
-
-                <div className="flex gap-3 pt-4">
-                  <button
-                    type="button"
-                    onClick={() => setIsModalOpen(false)}
-                    className="flex-1 rounded-lg bg-gray-200 py-2.5 font-semibold text-gray-700 transition-colors hover:bg-gray-300"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="submit"
-                    className="flex-1 rounded-lg bg-teal-600 py-2.5 font-semibold text-white transition-colors hover:bg-teal-700"
-                  >
-                    Save Moderator
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-        )}
-
-        {/* Confirm Remove Modal */}
-        {isConfirmOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-            <div className="w-full max-w-sm rounded-xl bg-white p-8 shadow-xl">
-              <div className="mb-4 flex items-center gap-3">
-                <AlertCircle className="h-6 w-6 text-red-500" />
-                <h2 className="text-xl font-bold text-slate-800">
-                  Confirm Action
-                </h2>
-              </div>
-              <p className="mb-6 text-gray-600">
-                Are you sure you want to remove this moderator? This action
-                cannot be undone.
-              </p>
-              <div className="flex gap-3">
-                <button
-                  onClick={() => setIsConfirmOpen(false)}
-                  className="flex-1 rounded-lg bg-gray-200 py-2.5 font-semibold text-gray-700 transition-colors hover:bg-gray-300"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={confirmRemove}
-                  className="flex-1 rounded-lg bg-red-500 py-2.5 font-semibold text-white transition-colors hover:bg-red-600"
-                >
-                  Remove
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
+        <Footertxt />
+        </div>
     </AdminLayout>
   );
 }

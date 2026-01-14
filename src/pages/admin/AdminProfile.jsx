@@ -62,7 +62,7 @@ export default function AdminProfile() {
   if (loading || !adminData) {
     return (
       <AdminLayout>
-        <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-[#264653] via-[#2a9d8f] to-[#264653]">
+        <div className="min-h-screen flex items-center justify-center p-4 bg-linear-to-br from-[#264653] via-[#2a9d8f] to-[#264653]">
           <div className="text-center">
             <RippleSpinner size={148} color="hsl(173, 80%, 40%)" />
             
@@ -107,7 +107,7 @@ export default function AdminProfile() {
           {/* Header */}
           <div className="text-center mb-6 md:mb-8">
             <div className="inline-block relative mb-4 md:mb-6">
-              <div className="w-16 h-16 md:w-20 md:h-20 bg-gradient-to-br from-[#e9c46a] to-[#f4a261] rounded-3xl flex items-center justify-center shadow-[0_0_30px_rgba(233,196,106,0.3)]">
+              <div className="w-16 h-16 md:w-20 md:h-20 bg-linear-to-br from-[#e9c46a] to-[#f4a261] rounded-3xl flex items-center justify-center shadow-[0_0_30px_rgba(233,196,106,0.3)]">
                 <span className="text-xl md:text-2xl font-bold text-gray-800">
                   {avatarInitials}
                 </span>
@@ -154,7 +154,7 @@ export default function AdminProfile() {
           <div className="grid gap-4">
             <button
               onClick={handleEditProfile}
-              className="w-full py-3 md:py-4 rounded-2xl font-semibold flex items-center justify-center gap-2 hover:scale-105 transition cursor-pointer bg-gradient-to-br from-[#2a9d8f] to-[#264653] text-white shadow-lg"
+              className="w-full py-3 md:py-4 rounded-2xl font-semibold flex items-center justify-center gap-2 hover:scale-105 transition cursor-pointer bg-linear-to-br from-[#2a9d8f] to-[#264653] text-white shadow-lg"
             >
               <Edit className="w-5 h-5 md:w-6 md:h-6" /> Edit Profile
             </button>
@@ -176,12 +176,12 @@ export default function AdminProfile() {
 function InfoItem({ icon, iconBg, label, value, onCopy }) {
   return (
     <div className="rounded-2xl p-3 md:p-5 flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 bg-white/40 border border-white/20 shadow">
-      <div className={`w-12 h-12 md:w-14 md:h-14 bg-gradient-to-br ${iconBg} rounded-xl flex items-center justify-center flex-shrink-0`}>
+      <div className={`w-12 h-12 md:w-14 md:h-14 bg-linear-to-br ${iconBg} rounded-xl flex items-center justify-center shrink-0`}>
         {icon}
       </div>
       <div className="flex-1">
         <p className="text-sm md:text-base text-gray-500">{label}</p>
-        <p className="font-semibold text-gray-900 break-words">{value}</p>
+        <p className="font-semibold text-gray-900 wrap-break-word">{value}</p>
       </div>
       {onCopy && (
         <button onClick={onCopy} className="text-[#2a9d8f] hover:text-[#e9c46a] transition mt-2 sm:mt-0">
