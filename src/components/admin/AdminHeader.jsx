@@ -8,7 +8,7 @@ const menuItems = [
   ["Moderators", "/admin/moderators"],
   ["Manage Users", "/admin/manage-users"],
   ["Profile", "/admin/profile"],
-  ["Settings", "/admin/settings"],
+
 ]
 
 function AdminHeader() {
