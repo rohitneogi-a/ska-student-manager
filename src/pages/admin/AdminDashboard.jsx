@@ -11,6 +11,7 @@ import {
   User,
   AlertTriangle,
 } from "lucide-react";
+import Footertxt from '../../components/common/Footertxt';
 
 // --- Stats Cards Data ---
 const statsCards = [
@@ -122,6 +123,7 @@ function AdminDashboard() {
             ))}
           </div>
         </div>
+        <Footertxt />
       </div>
     </AdminLayout>
   )

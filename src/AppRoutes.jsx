@@ -104,6 +104,14 @@ export default function AppRoutes() {
           </ProtectedRoute>
         }
       />
+      <Route
+        path="/admin/profile"
+        element={
+          <ProtectedRoute allowedRoles={["admin"]}>
+            <AdminProfile />
+          </ProtectedRoute>
+        }
+      />
       {/* Catch-all */}
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>

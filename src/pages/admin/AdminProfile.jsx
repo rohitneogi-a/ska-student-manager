@@ -13,6 +13,7 @@ import { useNavigate } from "react-router-dom"
 import toast from "react-hot-toast"
 import AdminLayout from "../../layouts/AdminLayout"
 import RippleSpinner from "../../components/common/RippleSpinner"
+import Footertxt from "../../components/common/Footertxt";
 
 export default function AdminProfile() {
   const [toastMsg, setToastMsg] = useState(null)
@@ -65,9 +66,9 @@ export default function AdminProfile() {
         <div className="min-h-screen flex items-center justify-center p-4 bg-linear-to-br from-[#264653] via-[#2a9d8f] to-[#264653]">
           <div className="text-center">
             <RippleSpinner size={148} color="hsl(173, 80%, 40%)" />
-            
           </div>
         </div>
+        <Footertxt />
       </AdminLayout>
     )
   }
@@ -92,7 +93,7 @@ export default function AdminProfile() {
 
   return (
     <AdminLayout>
-      <div className="min-h-screen flex items-center justify-center relative overflow-hidden font-alert-card bg-linear-to-br from-[#e6f1ef] via-[#d4ede8] to-[#e6f1ef] px-4 md:px-8 lg:px-16">
+      <div className="min-h-screen flex items-center justify-center relative overflow-hidden font-alert-card  px-4 md:px-8 lg:px-16">
 
         {/* Background Orbs */}
         <div className="fixed top-0 left-0 w-full h-full overflow-hidden z-0 pointer-events-none">
@@ -169,6 +170,7 @@ export default function AdminProfile() {
           </div>
         )}
       </div>
+      <Footertxt />
     </AdminLayout>
   )
 }
