@@ -42,7 +42,7 @@ function UserHeader() {
           <div className="w-10 h-10 rounded-xl flex items-center justify-center gradient-accent text-white shadow-md">
             <GraduationCap className="w-6 h-6" />
           </div>
-          <span className="text-lg sm:text-xl font-bold text-slate-800">
+          <span className="text-lg sm:text-xl font-bold text-slate-800 " >
             SKA Manager
           </span>
         </div>
@@ -55,8 +55,8 @@ function UserHeader() {
               onClick={() => navigate(path)}
               className={`px-4 py-2 rounded-xl font-semibold transition
                 ${location.pathname === path
-                  ? "bg-white/40 text-cyan-700 border border-white/40"
-                  : "hover:text-cyan-500 cursor-pointer"}
+                  ? "bg-white/40 text-cyan-700 border border-white/40 btn-primary"
+                  : "hover:text-white-500 btn-primary"}
               `}
             >
               {label}
@@ -66,7 +66,7 @@ function UserHeader() {
           <button
             onClick={handleLogout}
             className="px-4 py-2 rounded-xl font-semibold flex items-center gap-2
-              bg-white/30 border border-white/40 hover:bg-white/50 transition cursor-pointer"
+              bg-white/30 border border-white/40 hover:bg-white/50 transition btn-primary"
           >
             <LogOut className="w-5 h-5" />
             Logout
@@ -75,7 +75,7 @@ function UserHeader() {
 
         {/* Mobile / Tablet Menu Button */}
         <button
-          className="lg:hidden p-2 rounded-lg hover:bg-white/30 transition cursor-pointer"
+          className="lg:hidden p-2 rounded-lg hover:bg-white/30 transition cursor-pointer btn-primary"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
         >
           {mobileMenuOpen ? <X /> : <Menu />}
@@ -99,8 +99,8 @@ function UserHeader() {
               }}
               className={`py-3 px-4 rounded-lg text-left text-base transition
                 ${location.pathname === path
-                  ? "bg-white/30 border border-white/40"
-                  : "hover:bg-white/10"}
+                  ? "bg-white/30 border border-white/40 btn-primary"
+                  : "hover:bg-white/10 btn-primary"}
               `}
             >
               {label}
@@ -112,7 +112,7 @@ function UserHeader() {
               handleLogout()
               setMobileMenuOpen(false)
             }}
-            className="mt-2 py-3 px-4 rounded-lg bg-cyan-500 text-white font-semibold"
+            className="mt-2 py-3 px-4 rounded-lg bg-cyan-500 text-white font-semibold btn-primary"
           >
             Logout
           </button>

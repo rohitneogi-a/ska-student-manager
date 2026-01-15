@@ -123,7 +123,7 @@ export default function SignInForm() {
                   <button
                     type="button"
                     onClick={togglePassword}
-                    className="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-gray-300 transition-colors z-10"
+                    className="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 cursor-pointer transition-colors z-10 "
                   >
                     {showPassword ? (
                       <EyeOff className="w-5 h-5" strokeWidth={2} />

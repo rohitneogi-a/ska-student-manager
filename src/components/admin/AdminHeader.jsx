@@ -57,8 +57,8 @@ function AdminHeader() {
               onClick={() => navigate(path)}
               className={`px-4 py-2 rounded-xl font-semibold transition
                 ${location.pathname === path
-                  ? "bg-white/40 text-cyan-700 border border-white/40"
-                  : "hover:text-cyan-500"}
+                  ? "bg-white/40 text-cyan-700 border border-white/40 btn-primary"
+                  : "hover:text-white-500 btn-primary"}
               `}
             >
               {label}
@@ -68,7 +68,7 @@ function AdminHeader() {
           <button
             onClick={handleLogout}
             className="px-4 py-2 rounded-xl font-semibold flex items-center gap-2
-              bg-white/30 border border-white/40 hover:bg-white/50 transition"
+              bg-white/30 border border-white/40 hover:bg-white/50 transition btn-primary"
           >
             <LogOut className="w-5 h-5" />
             Logout
@@ -87,8 +87,8 @@ function AdminHeader() {
       {/* Mobile / Tablet Dropdown Menu */}
       <div
         className={`lg:hidden absolute left-0 w-full bg-teal-900/95 backdrop-blur-xl
-          transition-all duration-300 overflow-hidden
-          ${mobileMenuOpen ? "max-h-125 opacity-100" : "max-h-0 opacity-0"}
+          transition-all duration-300 overflow-hidden 
+          ${mobileMenuOpen ? "max-h-125 opacity-100 " : "max-h-0 opacity-0"}
         `}
       >
         <div className="flex flex-col gap-2 p-4 text-white">
@@ -99,10 +99,10 @@ function AdminHeader() {
                 navigate(path)
                 setMobileMenuOpen(false)
               }}
-              className={`py-3 px-4 rounded-lg text-left text-base transition
+              className={`py-3 px-4 rounded-lg text-left text-base transition 
                 ${location.pathname === path
-                  ? "bg-white/30 border border-white/40"
-                  : "hover:bg-white/10"}
+                  ? "bg-white/30 border btn-primary border-white/40"
+                  : "hover:bg-white/10 btn-primary"}
               `}
             >
               {label}
@@ -114,7 +114,7 @@ function AdminHeader() {
               handleLogout()
               setMobileMenuOpen(false)
             }}
-            className="mt-2 py-3 px-4 rounded-lg bg-cyan-500 text-white font-semibold"
+            className="mt-2 py-3 px-4 rounded-lg bg-cyan-500 text-white font-semibold btn-primary"
           >
             Logout
           </button>

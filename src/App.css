@@ -72,6 +72,10 @@
 .font-long-text {
   font-family: "Merriweather", serif;
 }
+.btn-primary {
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
 
 .glass-card {
           background: rgba(255, 255, 255, 0.05);
@@ -165,9 +169,13 @@
 }
 
 /* Buttons */
-.btn-primary {
-    transition: all 0.3s ease;
+
+.btn-primary:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+    pointer-events: none;
 }
+
 
 .btn-primary:hover {
     transform: translateY(-2px);

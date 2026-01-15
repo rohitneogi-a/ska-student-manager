@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Plus, Search, Edit2, Trash2, AlertCircle } from "lucide-react";
+import { Plus, Search, Edit2, Trash2, AlertCircle, ChartNoAxesGantt,} from "lucide-react";
 import AdminLayout from "../../layouts/AdminLayout";
 import { useHttp } from "../../components/hooks/useHttp";
 import RippleSpinner from "../../components/common/RippleSpinner";
 import StatusDot from "../../components/common/StatusDot";
 import Footertxt from "../../components/common/Footertxt";
+import ModeratorRegisterModal from "../moderator/ModeratorRegister"
+import toast from "react-hot-toast";
 
 export default function ManageModerators() {
   const { get, loading, error } = useHttp();
@@ -22,6 +24,15 @@ export default function ManageModerators() {
     status: "active",
   });
 
+  const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
+
+function formatDate(dateString) {
+  const d = new Date(dateString);
+  const day = String(d.getDate()).padStart(2, "0");
+  const month = String(d.getMonth() + 1).padStart(2, "0");
+  const year = d.getFullYear();
+  return `${day}-${month}-${year}`;
+}
   //   Fetch moderators from API
   useEffect(() => {
     const fetchModerators = async () => {
@@ -34,7 +45,7 @@ export default function ManageModerators() {
           phone: mod.phoneNo,
           dept: mod.dept || "N/A",
           status: mod.status || "active",
-          joined: new Date(mod.createdAt).toISOString().split("T")[0],
+          joined: formatDate(mod.createdAt),
           profileImage: mod.profileImage,
         }));
         setModerators(formattedData);
@@ -137,6 +148,24 @@ export default function ManageModerators() {
     }
   };
 
+  // Add this function to refresh the list after registration
+  const refreshModerators = async () => {
+    const res = await get("/api/admin/allModerators");
+    if (res && Array.isArray(res.data)) {
+      const formattedData = res.data.map((mod) => ({
+        id: mod._id,
+        name: mod.fullName,
+        email: mod.email,
+        phone: mod.phoneNo,
+        dept: mod.dept || "N/A",
+        status: mod.status || "active",
+        joined: formatDate(mod.createdAt),
+        profileImage: mod.profileImage,
+      }));
+      setModerators(formattedData);
+    }
+  };
+
   return (
     <AdminLayout>
 
@@ -168,8 +197,8 @@ export default function ManageModerators() {
                 />
               </div>
               <button
-                onClick={handleAddModerator}
-                className="flex items-center gap-2 rounded-lg bg-teal-600 px-6 py-2.5 font-semibold text-white transition-all hover:bg-teal-700 hover:shadow-lg hover:-translate-y-0.5 whitespace-nowrap"
+                onClick={() => setIsRegisterModalOpen(true)}
+                className="flex items-center gap-2 rounded-lg bg-teal-600 px-6 py-2.5 font-semibold text-white transition-all hover:bg-teal-700 hover:shadow-lg hover:-translate-y-0.5 whitespace-nowrap btn-primary"
               >
                 <Plus className="h-5 w-5" />
                 Add Moderator
@@ -200,6 +229,7 @@ export default function ManageModerators() {
                   </div>
                   <div>
                     <h3 className="font-semibold text-slate-800">{mod.name}</h3>
+                    <span className="text-sm text-gray-500">Moderator</span>
                   </div>
                 </div>
 
@@ -242,17 +272,17 @@ export default function ManageModerators() {
                 </div>
 
                 {/* Action Buttons */}
-                <div className="flex gap-3">
+                <div className="flex gap-3 ">
                   <button
                     onClick={() => handleEditModerator(mod.id)}
-                    className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-yellow-400 py-2.5 font-semibold text-white transition-colors hover:bg-yellow-500"
+                    className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-yellow-400 py-2.5 font-semibold text-white transition-colors hover:bg-yellow-500 btn-primary "
                   >
-                    <Edit2 className="h-4 w-4" />
-                    Edit
+                    <ChartNoAxesGantt  className="h-4 w-4" />
+                    View More
                   </button>
                   <button
                     onClick={() => handleRemoveModerator(mod.id)}
-                    className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-orange-500 py-2.5 font-semibold text-white transition-colors hover:bg-orange-600"
+                    className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-orange-500 py-2.5 font-semibold text-white transition-colors hover:bg-orange-600 btn-primary"
                   >
                     <Trash2 className="h-4 w-4" />
                     Remove
@@ -265,6 +295,17 @@ export default function ManageModerators() {
 
       </div>
         <Footertxt />
+        {/* Register Moderator Modal */}
+        <ModeratorRegisterModal
+          isOpen={isRegisterModalOpen}
+          onClose={async (newModerator) => {
+            setIsRegisterModalOpen(false);
+            if (newModerator) {
+              toast.success("Moderator registered successfully!");
+              await refreshModerators();
+            }
+          }}
+        />
         </div>
     </AdminLayout>
   );

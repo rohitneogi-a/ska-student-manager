@@ -19,6 +19,14 @@ function ManageUsers() {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
 
+function formatDate(dateString) {
+  const d = new Date(dateString);
+  const day = String(d.getDate()).padStart(2, "0");
+  const month = String(d.getMonth() + 1).padStart(2, "0");
+  const year = d.getFullYear();
+  return `${day}-${month}-${year}`;
+}
+
   // Fetch all students (users) on mount
   useEffect(() => {
     const fetchUsers = async () => {
@@ -34,7 +42,7 @@ function ManageUsers() {
             subject: u.subject,
             address: u.address,
             profileImage: u.profileImage,
-            joined: u.createdAt ? new Date(u.createdAt).toISOString().split("T")[0] : "",
+            joined: formatDate(u.createdAt),
             status: u.status || "active", // Default to active if not present
           }))
         );
@@ -91,8 +99,7 @@ function ManageUsers() {
       (user.name && user.name.toLowerCase().includes(searchInput.toLowerCase())) ||
  
       (user.phone && user.phone.toLowerCase().includes(searchInput.toLowerCase())) ||
-      (user.subject && user.subject.toLowerCase().includes(searchInput.toLowerCase())) ||
-      (user.id && user.id.toLowerCase().includes(searchInput.toLowerCase()));
+      (user.subject && user.subject.toLowerCase().includes(searchInput.toLowerCase()))
     const matchesStatus = statusFilter === "" || user.status === statusFilter;
     // No subscription filter for this data, but keep for future
     return matchesSearch && matchesStatus;
@@ -168,7 +175,7 @@ function ManageUsers() {
             <div className="w-full overflow-x-auto ">
               <table className="w-full min-w-max ">
                 <thead className="bg-gray-50">
-                  <tr className="card-hover">
+                  <tr className="">
                     <th className="px-6 py-4 text-left font-semibold text-slate-800 text-sm uppercase tracking-wide">
                       Student
                     </th>
@@ -190,7 +197,7 @@ function ManageUsers() {
                     </th>
                   </tr>
                 </thead>
-                <tbody className="card-hover">
+                <tbody className="">
                   {loading ? (
                     <tr>
                       <td colSpan={7} className="text-center py-8 text-gray-500">
@@ -213,9 +220,9 @@ function ManageUsers() {
                     paginatedUsers.map((user) => (
                       <tr
                         key={user.id}
-                        className="border-b border-gray-100 hover:bg-gray-50 transition-colors"
+                        className="border-b border-gray-100 hover:bg-gray-50 transition-colors card-hover "
                       >
-                        <td className="px-6 py-4 card-hover">
+                        <td className="px-6 py-4">
                           <div className="flex items-center gap-3">
                             <img
                               src={user.profileImage}
@@ -233,7 +240,7 @@ function ManageUsers() {
                                 {user.name}
                               </span>
                               <span className="text-xs text-gray-500">
-                                {user.id}
+                                
                               </span>
                             </div>
                           </div>
@@ -261,19 +268,19 @@ function ManageUsers() {
                           <div className="flex items-center gap-2">
                             <button
                               onClick={() => viewUser(user)}
-                              className="w-8 h-8 rounded-lg bg-teal-100 text-teal-600 hover:scale-110 transition-transform flex items-center justify-center"
+                              className="w-8 h-8 rounded-lg bg-teal-100 text-teal-600 hover:scale-110 transition-transform flex items-center justify-center btn-primary "
                               title="View"
                             >
                               <Eye size={16} />
                             </button>
                             <button
-                              className="w-8 h-8 rounded-lg bg-yellow-100 text-yellow-600 hover:scale-110 transition-transform flex items-center justify-center"
+                              className="w-8 h-8 rounded-lg bg-yellow-100 text-yellow-600 hover:scale-110 transition-transform flex items-center justify-center btn-primary "
                               title="Edit"
                             >
                               <Pencil size={16} />
                             </button>
                             <button
-                              className="w-8 h-8 rounded-lg bg-red-100 text-red-600 hover:scale-110 transition-transform flex items-center justify-center"
+                              className="w-8 h-8 rounded-lg bg-red-100 text-red-600 hover:scale-110 transition-transform flex items-center justify-center btn-primary "
                               title="Delete"
                             >
                               <Trash2 size={16} />
