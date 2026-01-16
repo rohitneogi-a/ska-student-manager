@@ -1,93 +1,241 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import StatusDot from "../../components/common/StatusDot";
-
-
+import { X, ChevronDown } from "lucide-react";
+import { useHttp } from "../../components/hooks/useHttp";
 
 function formatDate(dateString) {
+  if (!dateString) return "N/A";
   const d = new Date(dateString);
+  if (isNaN(d)) return "N/A";
   const day = String(d.getDate()).padStart(2, "0");
   const month = String(d.getMonth() + 1).padStart(2, "0");
   const year = d.getFullYear();
   return `${day}-${month}-${year}`;
 }
-function ViewModal({ selectedUser, setIsModalOpen, getStatusDotColor, getStatusColor }) {
+
+function getStatusColor(status) {
+  switch (status) {
+    case "PAID":
+      return "bg-[rgba(42,157,143,0.1)] text-[#2a9d8f]";
+    case "DUE":
+      return "bg-[rgba(231,111,81,0.1)] text-[#e76f51]";
+    default:
+      return "bg-gray-100 text-gray-500";
+  }
+}
+
+
+  const getStatusDotColor = (status) => {
+    switch (status) {
+      case "PAID":
+        return "bg-teal-500";
+      case "DUE":
+        return "bg-red-500";
+      default:
+        return "bg-gray-500";
+    }
+  };
+
+function getMonthName(monthNumber) {
+  const monthNames = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+  ];
+  return monthNames[monthNumber - 1] || "N/A";
+}
+
+function ViewModal({ selectedUser, setIsModalOpen }) {
+  const { get, loading, error } = useHttp();
+  const [paymentDetails, setPaymentDetails] = useState(null);
+  const [isStudentDetailsOpen, setIsStudentDetailsOpen] = useState(false);
+  const [isPaymentDetailsOpen, setIsPaymentDetailsOpen] = useState(true);
+
+  // Get current year and month
+  const currentYear = new Date().getFullYear();
+  const currentMonth = new Date().getMonth() + 1;
+  const [selectedMonth, setSelectedMonth] = useState(currentMonth);
+
+  const months = [
+    { value: 1, label: "January" },
+    { value: 2, label: "February" },
+    { value: 3, label: "March" },
+    { value: 4, label: "April" },
+    { value: 5, label: "May" },
+    { value: 6, label: "June" },
+    { value: 7, label: "July" },
+    { value: 8, label: "August" },
+    { value: 9, label: "September" },
+    { value: 10, label: "October" },
+    { value: 11, label: "November" },
+    { value: 12, label: "December" },
+  ];
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, []);
+  useEffect(() => {
+    if (selectedUser?.id) {
+      get(`/api/admin/${selectedUser.id}/payments?year=${currentYear}&month=${selectedMonth}`).then((res) => {
+        if (res && res.success) {
+          setPaymentDetails(res.data);
+        } else {
+          setPaymentDetails(null);
+        }
+      });
+    }
+  }, [selectedUser, get, currentYear, selectedMonth]);
+
   if (!selectedUser) return null;
 
   return (
+    <div className="fixed inset-0 bg-black/50 z-2000 flex items-center justify-center p-2">
+      <div className="bg-white rounded-xl p-3 max-w-xl w-full max-h-[90vh] overflow-y-auto relative">
+        {/* Close Button (top right) */}
+        <button
+          onClick={() => setIsModalOpen(false)}
+          className="absolute top-4 right-4 text-gray-500 hover:text-white hover:bg-red-300 rounded-full w-8 h-8 flex items-center justify-center transition btn-primary"
+        >
+          <X />
+        </button>
+        <h2 className="text-2xl font-bold text-slate-800 mb-6">
+          Student Details
+        </h2>
 
-
-      <div className="fixed inset-0 bg-black/50 z-2000 flex items-center justify-center p-4">
-            <div className="bg-white rounded-xl p-8 max-w-xl w-full max-h-[90vh] overflow-y-auto">
-              <h2 className="text-2xl font-bold text-slate-800 mb-6">
-                Student Details
-              </h2>
-              {selectedUser && (
-                <div className="flex flex-wrap gap-5 mb-6">
-                  <div className="bg-gray-50 p-4 rounded-lg flex-1 min-w-55">
-                    <p className="text-xs text-gray-500 mb-1">Full Name</p>
-                    <p className="text-slate-800 font-medium">
-                      {selectedUser.name}
-                    </p>
-                  </div>
-                  <div className="bg-gray-50 p-4 rounded-lg flex-1 min-w-55">
-                    <p className="text-xs text-gray-500 mb-1">Guardian Name</p>
-                    <p className="text-slate-800 font-medium">
-                      {selectedUser.guardian}
-                    </p>
-                  </div>
-                  <div className="bg-gray-50 p-4 rounded-lg flex-1 min-w-55">
-                    <p className="text-xs text-gray-500 mb-1">Phone</p>
-                    <p className="text-slate-800 font-medium">
-                      {selectedUser.phone}
-                    </p>
-                  </div>
-                  <div className="bg-gray-50 p-4 rounded-lg flex-1 min-w-55">
-                    <p className="text-xs text-gray-500 mb-1">Subject</p>
-                    <p className="text-slate-800 font-medium">
-                      {selectedUser.subject}
-                    </p>
-                  </div>
-                  <div className="bg-gray-50 p-4 rounded-lg flex-1 min-w-55">
-                    <p className="text-xs text-gray-500 mb-1">Date of Birth</p>
-                    <p className="text-slate-800 font-medium">
-                      {selectedUser.dob ? formatDate(selectedUser.dob) : "N/A"}
-                    </p>
-                  </div>
-                  <div className="bg-gray-50 p-4 rounded-lg flex-1 min-w-55">
-                    <p className="text-xs text-gray-500 mb-1">Address</p>
-                    <p className="text-slate-800 font-medium">
-                      {selectedUser.address}
-                    </p>
-                  </div>
-                  <div className="bg-gray-50 p-4 rounded-lg flex-1 min-w-55">
-                    <p className="text-xs text-gray-500 mb-1">Status</p>
-                    <div className="flex items-center gap-2">
-                      <StatusDot
-                        pingColor={getStatusDotColor(selectedUser.status)}
-                        dotColor={getStatusDotColor(selectedUser.status)}
-                      />
-                      <span
-                        className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${getStatusColor(
-                          selectedUser.status
-                        )}`}
-                      >
-                        {selectedUser.status
-                          ? selectedUser.status.toUpperCase()
-                          : "ACTIVE"}
-                      </span>
-                    </div>
-                  </div>
+        {/* Student Details Accordion */}
+        <div className="border border-gray-200 rounded-lg mb-3">
+          <button
+            onClick={() => setIsStudentDetailsOpen(!isStudentDetailsOpen)}
+            className="w-full flex items-center justify-between p-4 hover:bg-gray-50 transition"
+          >
+            <span className="font-semibold text-slate-800">Student Details</span>
+            <ChevronDown className={`w-5 h-5 transition-transform ${isStudentDetailsOpen ? 'rotate-180' : ''}`} />
+          </button>
+          {isStudentDetailsOpen && (
+            <div className=" pt-0">
+              <div className="flex flex-wrap gap-5 mb-2">
+                <div className="bg-gray-50 p-4 rounded-lg flex-1 min-w-55">
+                  <p className="text-xs text-gray-500 mb-1">Full Name</p>
+                  <p className="text-slate-800 font-medium">
+                    {selectedUser.name}
+                  </p>
                 </div>
-              )}
-              <button
-                onClick={() => setIsModalOpen(false)}
-                className="w-full bg-teal-600 hover:bg-teal-700 text-white py-3 rounded-lg font-semibold transition-all btn-primary"
-              >
-                Close
-              </button>
+                <div className="bg-gray-50 p-4 rounded-lg flex-1 min-w-55">
+                  <p className="text-xs text-gray-500 mb-1">Guardian Name</p>
+                  <p className="text-slate-800 font-medium">
+                    {selectedUser.guardian}
+                  </p>
+                </div>
+                <div className="bg-gray-50 p-4 rounded-lg flex-1 min-w-55">
+                  <p className="text-xs text-gray-500 mb-1">Phone</p>
+                  <p className="text-slate-800 font-medium">
+                    {selectedUser.phone}
+                  </p>
+                </div>
+                <div className="bg-gray-50 p-4 rounded-lg flex-1 min-w-55">
+                  <p className="text-xs text-gray-500 mb-1">Subject</p>
+                  <p className="text-slate-800 font-medium">
+                    {selectedUser.subject}
+                  </p>
+                </div>
+                <div className="bg-gray-50 p-4 rounded-lg flex-1 min-w-55">
+                  <p className="text-xs text-gray-500 mb-1">Date of Birth</p>
+                  <p className="text-slate-800 font-medium">
+                    {selectedUser.dob ? formatDate(selectedUser.dob) : "N/A"}
+                  </p>
+                </div>
+                <div className="bg-gray-50 p-4 rounded-lg flex-1 min-w-55">
+                  <p className="text-xs text-gray-500 mb-1">Address</p>
+                  <p className="text-slate-800 font-medium">
+                    {selectedUser.address}
+                  </p>
+                </div>
+              </div>
             </div>
-          </div>
-  )
+          )}
+        </div>
+
+        {/* Payment Details Accordion */}
+        <div className="border border-gray-200 rounded-lg">
+          <button
+            onClick={() => setIsPaymentDetailsOpen(!isPaymentDetailsOpen)}
+            className="w-full flex items-center justify-between p-4 hover:bg-gray-50 transition"
+          >
+            <span className="font-semibold text-slate-800">Payment Details</span>
+            <ChevronDown className={`w-5 h-5 transition-transform ${isPaymentDetailsOpen ? 'rotate-180' : ''}`} />
+          </button>
+          {isPaymentDetailsOpen && (
+            <div className="p-2 pt-0">
+              {/* Month Selector */}
+              <div className="mb-4">
+                <label className="text-xs text-gray-500 mb-2 block">Select Month</label>
+                <select
+                  value={selectedMonth}
+                  onChange={(e) => setSelectedMonth(parseInt(e.target.value))}
+                  className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg text-sm focus:outline-none"
+                >
+                  {months.map((month) => (
+                    <option key={month.value} value={month.value}>
+                      {month.label} {month.value === currentMonth ? "(Current)" : ""}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Payment Details Table */}
+              <div className="w-full ">
+                {loading && <p className="text-center py-4">Loading payment details...</p>}
+                {error && <p className="text-center py-4 text-red-500">{error}</p>}
+                {!loading && !error && paymentDetails && Array.isArray(paymentDetails) && paymentDetails.length > 0 ? (
+                  <div className="w-full  space-y-2">
+                    {paymentDetails.map((payment, idx) => (
+                      <div key={idx} className={`p-4 rounded-lg border border-gray-200 ${getStatusColor(payment.status)}`}>
+                        <div className="grid grid-cols-3 gap-4">
+                          <div>
+                            <p className="text-sm  text-gray-500 mb-1">Month</p>
+                            <p className="font-medium">{getMonthName(payment.month)}</p>
+                          </div>
+                          <div>
+                            <p className="text-sm text-gray-500 mb-1">Status</p>
+                            <div className="flex items-center gap-2">
+                              <StatusDot 
+                                pingColor={getStatusDotColor(payment.status)}
+                                dotColor={getStatusDotColor(payment.status)}
+                              />
+                              <span className="font-medium text-sm">{payment.status}</span>
+                            </div>
+                          </div>
+                          <div>
+                            <p className="text-sm     text-gray-500 mb-1">{payment.status === "DUE" ? "Action" : "Paid On"}</p>
+                            {payment.status === "DUE" ? (
+                              <button
+                                onClick={() => {
+                                  // Add your payment handler logic here
+                                  console.log('Pay clicked for:', payment);
+                                }}
+                                className="p-2 bg-teal-500 text-white rounded-lg hover:bg-[#d45f41] transition text-sm"
+                              >
+                                Pay Now
+                              </button>
+                            ) : (
+                              <p className="font-medium text-[#2a9d8f]">{payment.paidOn ? formatDate(payment.paidOn) : "N/A"}</p>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  !loading && <p className="text-center py-4 text-gray-500">No payment details found for the selected month.</p>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default ViewModal

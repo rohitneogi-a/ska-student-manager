@@ -37,12 +37,12 @@ function ManageUsers() {
             name: u.fullName,
             guardian: u.guardianName,
             phone: u.phoneNo,
-            dob: u.dob ? formatDate(u.dob) : "",
+            dob: u.dob || "", // <-- keep raw value
             subject: u.subject,
             address: u.address,
             profileImage: u.profileImage,
             joined: formatDate(u.createdAt),
-            status: u.paymentStatus || "DUE", // Use paymentStatus for status
+
           }))
         );
       }
@@ -92,9 +92,12 @@ function ManageUsers() {
 
   const filteredUsers = users.filter((user) => {
     const matchesSearch =
-      (user.name && user.name.toLowerCase().includes(searchInput.toLowerCase())) ||
-      (user.phone && user.phone.toLowerCase().includes(searchInput.toLowerCase())) ||
-      (user.subject && user.subject.toLowerCase().includes(searchInput.toLowerCase()));
+      (user.name &&
+        user.name.toLowerCase().includes(searchInput.toLowerCase())) ||
+      (user.phone &&
+        user.phone.toLowerCase().includes(searchInput.toLowerCase())) ||
+      (user.subject &&
+        user.subject.toLowerCase().includes(searchInput.toLowerCase()));
     const matchesStatus = statusFilter === "" || user.status === statusFilter;
     return matchesSearch && matchesStatus;
   });
@@ -181,9 +184,7 @@ function ManageUsers() {
                       <th className="px-6 py-4 text-left font-semibold text-slate-800 text-sm uppercase tracking-wide">
                         Joined
                       </th>
-                      <th className="px-6 py-4 text-left font-semibold text-slate-800 text-sm uppercase tracking-wide">
-                        Status
-                      </th>
+                      
                       <th className="px-6 py-4 text-left font-semibold text-slate-800 text-sm uppercase tracking-wide">
                         Actions
                       </th>
@@ -212,7 +213,8 @@ function ManageUsers() {
                       paginatedUsers.map((user) => (
                         <tr
                           key={user.id}
-                          className="border-b border-gray-100 hover:bg-gray-50 transition-colors card-hover "
+                          className="border-b border-gray-100 hover:bg-gray-50 transition-colors card-hover cursor-pointer"
+                          onClick={() => viewUser(user)}
                         >
                           <td className="px-6 py-4">
                             <div className="flex items-center gap-3">
@@ -231,55 +233,26 @@ function ManageUsers() {
                                 <span className="text-slate-800 font-medium">
                                   {user.name}
                                 </span>
-                                 {user.status === "DUE" && (
-      <button
-        className="ml-2 px-4 py-1 rounded-lg bg-gradient-to-r from-[#e76f51] to-[#f4a261] text-white font-semibold text-xs shadow hover:scale-105 transition-transform"
-        onClick={() => alert(`Pay for ${user.name}`)}
-        title="Pay Now"
-      >
-        Pay
-      </button>
-    )}
+                               
                                 <span className="text-xs text-gray-500"></span>
                               </div>
                             </div>
                           </td>
-                          <td className="px-6 py-4 text-gray-600">{user.phone}</td>
-                          <td className="px-6 py-4 text-gray-600">{user.subject}</td>
-                          <td className="px-6 py-4 text-gray-600">{user.joined}</td>
-                          <td className="px-6 py-4">
-                            <div className="flex items-center gap-2">
-                              <StatusDot
-                                pingColor={getStatusDotColor(user.status)}
-                                dotColor={getStatusDotColor(user.status)}
-                              />
-                              <span
-                                className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${getStatusColor(
-                                  user.status
-                                )}`}
-                              >
-                                {user.status ? user.status.toUpperCase() : "DUE"}
-                              </span>
-                              
-                            </div>
+                          <td className="px-6 py-4 text-gray-600">
+                            {user.phone}
                           </td>
-                          <td className="px-6 py-4">
+                          <td className="px-6 py-4 text-gray-600">
+                            {user.subject}
+                          </td>
+                          <td className="px-6 py-4 text-gray-600">
+                            {user.joined}
+                          </td>
+                          
+                          {/* Separate Delete Button */}
+                          <td className="px-6 py-4" onClick={e => e.stopPropagation()}>
                             <div className="flex items-center gap-2">
                               <button
-                                onClick={() => viewUser(user)}
-                                className="w-8 h-8 rounded-lg bg-teal-100 text-teal-600 hover:scale-110 transition-transform flex items-center justify-center btn-primary "
-                                title="View"
-                              >
-                                <Eye size={16} />
-                              </button>
-                              <button
-                                className="w-8 h-8 rounded-lg bg-yellow-100 text-yellow-600 hover:scale-110 transition-transform flex items-center justify-center btn-primary "
-                                title="Edit"
-                              >
-                                <Pencil size={16} />
-                              </button>
-                              <button
-                                className="w-8 h-8 rounded-lg bg-red-100 text-red-600 hover:scale-110 transition-transform flex items-center justify-center btn-primary "
+                                className="w-8 h-8 rounded-lg bg-red-100 text-red-600 hover:scale-110 transition-transform flex items-center justify-center btn-primary"
                                 title="Delete"
                               >
                                 <Trash2 size={16} />
