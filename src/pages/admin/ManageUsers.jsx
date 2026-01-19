@@ -7,6 +7,7 @@ import Pagination from "@mui/material/Pagination";
 import { useHttp } from "../../components/hooks/useHttp";
 import ViewModal from "../../components/admin/ViewModal";
 import Footertxt from "../../components/common/Footertxt";
+import RippleSpinner from "../../components/common/RippleSpinner";
 
 function ManageUsers() {
   const { get, loading, error } = useHttp();
@@ -194,7 +195,7 @@ function ManageUsers() {
                     {loading ? (
                       <tr>
                         <td colSpan={7} className="text-center py-8 text-gray-500">
-                          Loading students...
+                          <RippleSpinner />
                         </td>
                       </tr>
                     ) : error ? (
