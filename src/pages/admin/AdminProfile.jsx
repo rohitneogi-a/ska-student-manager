@@ -44,21 +44,13 @@ export default function AdminProfile() {
     setTimeout(() => setToastMsg(null), 3000)
   }
 
-  const handleCopy = (text) => {
-    navigator.clipboard.writeText(text)
-    showToast("Copied to clipboard!")
-  }
+
 
   const handleEditProfile = () => {
     showToast("Opening profile editor...")
   }
 
-  const handleLogout = () => {
-    localStorage.removeItem("Token")
-    localStorage.removeItem("Role")
-    toast.success("Logged out successfully")
-    navigate("/login")
-  }
+
 
   if (loading || !adminData) {
     return (
@@ -128,7 +120,7 @@ export default function AdminProfile() {
               iconBg="from-[#dbe7e4]/70 via-[#c7e3dc]/70 to-[#dbe7e4]/70"
               label="Email Address"
               value={email}
-              onCopy={() => handleCopy(email)}
+
             />
             <InfoItem
               icon={<MapPinHouse className="w-5 h-5 md:w-6 md:h-6" />}
@@ -147,7 +139,6 @@ export default function AdminProfile() {
               iconBg="from-[#dbe7e4]/70 via-[#c7e3dc]/70 to-[#dbe7e4]/70"
               label="Phone Number"
               value={phone}
-              onCopy={() => handleCopy(phone)}
             />
           </div>
 

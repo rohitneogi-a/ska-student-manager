@@ -43,8 +43,7 @@ function ManageUsers() {
             address: u.address,
             profileImage: u.profileImage,
             joined: formatDate(u.createdAt),
-
-          }))
+          })),
         );
       }
     };
@@ -107,7 +106,7 @@ function ManageUsers() {
   const startIndex = (currentPage - 1) * itemsPerPage;
   const paginatedUsers = filteredUsers.slice(
     startIndex,
-    startIndex + itemsPerPage
+    startIndex + itemsPerPage,
   );
 
   const handlePageChange = (event, value) => {
@@ -143,20 +142,6 @@ function ManageUsers() {
                   className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg text-sm focus:outline-none focus:border-teal-500"
                 />
               </div>
-              <div className="flex-1 min-w-50">
-                <label className="block text-slate-800 font-semibold text-sm mb-2">
-                  Status
-                </label>
-                <select
-                  value={statusFilter}
-                  onChange={(e) => setStatusFilter(e.target.value)}
-                  className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg text-sm focus:outline-none"
-                >
-                  <option value="">All Statuses</option>
-                  <option value="PAID">Paid</option>
-                  <option value="DUE">Due</option>
-                </select>
-              </div>
             </div>
 
             {/* Users Table Container */}
@@ -185,7 +170,7 @@ function ManageUsers() {
                       <th className="px-6 py-4 text-left font-semibold text-slate-800 text-sm uppercase tracking-wide">
                         Joined
                       </th>
-                      
+
                       <th className="px-6 py-4 text-left font-semibold text-slate-800 text-sm uppercase tracking-wide">
                         Actions
                       </th>
@@ -194,19 +179,28 @@ function ManageUsers() {
                   <tbody className="">
                     {loading ? (
                       <tr>
-                        <td colSpan={7} className="text-center py-8 text-gray-500">
-                          <RippleSpinner />
+                        <td
+                          colSpan={5}
+                          className="py-8 text-gray-500 text-center align-middle"
+                        >
+                          <RippleSpinner size={148} color="hsl(173, 80%, 40%)"/>
                         </td>
                       </tr>
                     ) : error ? (
                       <tr>
-                        <td colSpan={7} className="text-center py-8 text-red-500">
+                        <td
+                          colSpan={7}
+                          className="text-center py-8 text-red-500"
+                        >
                           {error}
                         </td>
                       </tr>
                     ) : paginatedUsers.length === 0 ? (
                       <tr>
-                        <td colSpan={7} className="text-center py-8 text-gray-500">
+                        <td
+                          colSpan={7}
+                          className="text-center py-8 text-gray-500"
+                        >
                           No students found.
                         </td>
                       </tr>
@@ -234,7 +228,7 @@ function ManageUsers() {
                                 <span className="text-slate-800 font-medium">
                                   {user.name}
                                 </span>
-                               
+
                                 <span className="text-xs text-gray-500"></span>
                               </div>
                             </div>
@@ -248,9 +242,12 @@ function ManageUsers() {
                           <td className="px-6 py-4 text-gray-600">
                             {user.joined}
                           </td>
-                          
+
                           {/* Separate Delete Button */}
-                          <td className="px-6 py-4" onClick={e => e.stopPropagation()}>
+                          <td
+                            className="px-6 py-4"
+                            onClick={(e) => e.stopPropagation()}
+                          >
                             <div className="flex items-center gap-2">
                               <button
                                 className="w-8 h-8 rounded-lg bg-red-100 text-red-600 hover:scale-110 transition-transform flex items-center justify-center btn-primary"
