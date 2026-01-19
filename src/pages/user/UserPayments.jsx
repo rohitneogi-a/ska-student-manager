@@ -1,48 +1,68 @@
-import React from "react";
-
+import React, { useEffect, useState } from "react";
 import { IndianRupee } from "lucide-react";
-import UserLayout from '../../layouts/UserLayout'
+import UserLayout from '../../layouts/UserLayout';
+import Footertxt from '../../components/common/Footertxt';
+import RippleSpinner from "../../components/common/RippleSpinner";
+import { useHttp } from "../../components/hooks/useHttp";
+import StatusDot from "../../components/common/StatusDot";
 
-import Footertxt from '../../components/common/Footertxt'
-const salaryHistory = [
-  {
-    month: "December 2025",
-    amount: 5000,
-    status: "paid",
-    date: "Dec 1, 2025",
-    reference: "SKA-12-2025",
-  },
-  {
-    month: "November 2025",
-    amount: 5000,
-    status: "paid",
-    date: "Nov 1, 2025",
-    reference: "SKA-11-2025",
-  },
-  {
-    month: "October 2025",
-    amount: 5000,
-    status: "paid",
-    date: "Oct 1, 2025",
-    reference: "SKA-10-2025",
-  },
-  {
-    month: "September 2025",
-    amount: 5000,
-    status: "paid",
-    date: "Sep 1, 2025",
-    reference: "SKA-09-2025",
-  },
-  {
-    month: "August 2025",
-    amount: 5000,
-    status: "due",
-    date: "Aug 15, 2025",
-    reference: "SKA-08-2025",
-  },
-];
+function getStatusColor(status) {
+  switch (status) {
+    case "PAID":
+      return "bg-[rgba(42,157,143,0.1)] text-[#2a9d8f]";
+    case "DUE":
+      return "bg-[rgba(231,111,81,0.1)] text-[#e76f51]";
+    default:
+      return "bg-gray-100 text-gray-500";
+  }
+}
+
+const getStatusDotColor = (status) => {
+  switch (status) {
+    case "PAID":
+      return "bg-teal-500";
+    case "DUE":
+      return "bg-red-500";
+    default:
+      return "bg-gray-500";
+  }
+};
 
 function UserPayments() {
+  const { get, loading, error } = useHttp();
+  const [salaryHistory, setSalaryHistory] = useState([]);
+
+  const currentYear = new Date().getFullYear();
+
+  useEffect(() => {
+    const fetchSalaryHistory = async () => {
+      const res = await get(`/api/user/myPayments?year=${currentYear}`);
+      if (res && Array.isArray(res.data)) {
+        setSalaryHistory(res.data);
+      } else {
+        setSalaryHistory([]);
+      }
+    };
+    fetchSalaryHistory();
+  }, [get, currentYear]);
+
+  const getMonthName = (monthNumber) => {
+    const monthNames = [
+      "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+    ];
+    return monthNames[monthNumber - 1] || "N/A";
+  };
+
+  const formatDate = (dateString) => {
+    if (!dateString) return "N/A";
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = date.getFullYear();
+    return `${day}-${month}-${year}`;
+  };
+
   return (
     <UserLayout>
       <div className="min-h-screen flex flex-col">
@@ -54,36 +74,55 @@ function UserPayments() {
                 Payment History
               </h2>
             </div>
+
             <div className="flex flex-col gap-2 md:gap-3">
-              {salaryHistory.map((record, idx) => (
-                <div
-                  key={idx}
-                  className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 p-3 sm:p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition card-hover card-animate "
-                >
-                  <div className="flex-1 min-w-0">
-                    <h4 className="text-sm sm:text-base font-semibold text-gray-900 truncate">
-                      {record.month}
-                    </h4>
-                    <p className="text-xs text-gray-500 mt-1 truncate">
-                      {record.date} • {record.reference}
-                    </p>
-                  </div>
-                  <div className="flex items-center justify-between sm:justify-end gap-3 sm:gap-4">
-                    <span className="text-sm sm:text-base font-semibold text-gray-900 flex">
-                      <IndianRupee className="w-4" /> {record.amount.toLocaleString()}
-                    </span>
-                    <span
-                      className={`text-xs font-semibold px-2 sm:px-3 py-1 rounded-full whitespace-nowrap ${
-                        record.status === "paid"
-                          ? "bg-green-100 text-green-700"
-                          : "bg-orange-100 text-orange-700"
-                      }`}
-                    >
-                      {record.status === "paid" ? "Paid" : "Due"}
-                    </span>
-                  </div>
+              {loading ? (
+                <div className="flex justify-center py-8">
+                  <RippleSpinner size={48} color="#0d9488" />
                 </div>
-              ))}
+              ) : error ? (
+                <div className="text-center text-red-500 py-8">{error}</div>
+              ) : salaryHistory.length === 0 ? (
+                <div className="text-center text-gray-500 py-8">No payment records found.</div>
+              ) : (
+                salaryHistory.map((record, idx) => {
+                  const isPaid = record.status === "PAID";
+                  return (
+                    <div
+                      key={idx}
+                      className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 p-3 sm:p-4 bg-white rounded-lg shadow-sm hover:shadow-md transition card-hover card-animate"
+                    >
+                      <div className="flex-1 min-w-0">
+                        <h4 className="text-sm sm:text-base font-semibold truncate text-gray-900">
+                          {getMonthName(record.month)} {record.year}
+                        </h4>
+                        {isPaid && (
+                          <p className="text-xs text-gray-500 mt-1 truncate">
+                            {formatDate(record.date)} • {record.receiptNo}
+                          </p>
+                        )}
+                      </div>
+                      <div className="flex items-center justify-between sm:justify-end gap-3 sm:gap-4">
+                        {isPaid && record.amount && (
+                          <span className="text-sm sm:text-base font-semibold flex items-center text-gray-900">
+                            <IndianRupee className="w-4" />
+                            {record.amount.toLocaleString()}
+                          </span>
+                        )}
+                        <span
+                          className={`text-xs flex items-center gap-2 font-semibold px-2 sm:px-3 py-1 rounded-full whitespace-nowrap ${getStatusColor(record.status)}`}
+                        >
+                          <StatusDot
+                            pingColor={getStatusDotColor(record.status)}
+                            dotColor={getStatusDotColor(record.status)}
+                          />
+                          {isPaid ? "Paid" : "Due"}
+                        </span>
+                      </div>
+                    </div>
+                  );
+                })
+              )}
             </div>
           </div>
         </div>

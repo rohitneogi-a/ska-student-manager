@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import AdminLayout from "../../layouts/AdminLayout";
-import { Eye, Pencil, Trash2 } from "lucide-react";
+import { CircleAlert, Eye, Pencil, Trash2 } from "lucide-react";
 import StatusDot from "../../components/common/StatusDot";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import Pagination from "@mui/material/Pagination";
@@ -147,10 +147,17 @@ function ManageUsers() {
             {/* Users Table Container */}
             <div className="bg-white card-animate rounded-xl shadow-sm overflow-hidden ">
               {/* Table Header */}
-              <div className="px-6 py-5 border-b-2 border-gray-100 flex items-center justify-between">
+              <div className="px-6 py-5 border-b-2 border-gray-100 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <h3 className="text-lg font-semibold text-slate-800">
                   All Students ({filteredUsers.length})
                 </h3>
+
+                <span className="inline-flex items-center gap-2 px-3 py-1 bg-yellow-100 text-yellow-800 rounded text-sm font-semibold border border-yellow-300 self-start sm:self-auto">
+                  <CircleAlert className="w-4 h-4 shrink-0" />
+                  <span>
+                    Tip: Click a candidate row to reveal more insights.
+                  </span>
+                </span>
               </div>
 
               {/* Table */}
@@ -181,15 +188,20 @@ function ManageUsers() {
                       <tr>
                         <td
                           colSpan={5}
-                          className="py-8 text-gray-500 text-center align-middle"
+                          className="py-8 text-center"
                         >
-                          <RippleSpinner size={148} color="hsl(173, 80%, 40%)"/>
+                          <div className="flex justify-center items-center">
+                            <RippleSpinner
+                              size={148}
+                              color="hsl(173, 80%, 40%)"
+                            />
+                          </div>
                         </td>
                       </tr>
                     ) : error ? (
                       <tr>
                         <td
-                          colSpan={7}
+                          colSpan={5}
                           className="text-center py-8 text-red-500"
                         >
                           {error}
@@ -198,7 +210,7 @@ function ManageUsers() {
                     ) : paginatedUsers.length === 0 ? (
                       <tr>
                         <td
-                          colSpan={7}
+                          colSpan={5}
                           className="text-center py-8 text-gray-500"
                         >
                           No students found.
