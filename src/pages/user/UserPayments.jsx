@@ -36,10 +36,22 @@ function UserPayments() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const currentYear = new Date().getFullYear();
+  const [selectedYear, setSelectedYear] = useState(currentYear);
+
+  // Generate year options (from 2020 to current year + 1)
+  const generateYears = () => {
+    const years = [];
+    const startYear = 2020;
+    const endYear = currentYear + 1;
+    for (let year = endYear; year >= startYear; year--) {
+      years.push(year);
+    }
+    return years;
+  };
 
   useEffect(() => {
     const fetchSalaryHistory = async () => {
-      const res = await get(`/api/user/myPayments?year=${currentYear}`);
+      const res = await get(`/api/user/myPayments?year=${selectedYear}`);
       if (res && Array.isArray(res.data)) {
         setSalaryHistory(res.data);
       } else {
@@ -47,7 +59,7 @@ function UserPayments() {
       }
     };
     fetchSalaryHistory();
-  }, [get, currentYear]);
+  }, [get, selectedYear]);
 
   const getMonthName = (monthNumber) => {
     const monthNames = [
@@ -83,7 +95,29 @@ function UserPayments() {
               </h2>
             </div>
 
-            <div className="flex flex-col gap-2 md:gap-3">
+            {/* Year Dropdown */}
+            <div className="mb-4 md:mb-6">
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                Select Year
+              </label>
+              <select
+                value={selectedYear}
+                onChange={(e) => setSelectedYear(parseInt(e.target.value))}
+                className="w-full sm:w-48 px-4 py-2 border-2 border-gray-200 rounded-lg text-sm focus:outline-none focus:border-teal-500 bg-white"
+              >
+                {generateYears().map((year) => (
+                  <option key={year} value={year}>
+                    {year}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="flex flex-col gap-2 md:gap-3  ">
+              
+              <div className="text-center font-medium">
+                Payment Records for {selectedYear}:
+              </div>
               {loading ? (
                 <div className="flex justify-center py-8">
                   <RippleSpinner size={48} color="#0d9488" />
