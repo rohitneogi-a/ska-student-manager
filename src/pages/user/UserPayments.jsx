@@ -38,11 +38,11 @@ function UserPayments() {
   const currentYear = new Date().getFullYear();
   const [selectedYear, setSelectedYear] = useState(currentYear);
 
-  // Generate year options (from 2020 to current year + 1)
+  // Generate year options (from 2025 to current year + 1)
   const generateYears = () => {
     const years = [];
-    const startYear = 2020;
-    const endYear = currentYear + 1;
+    const startYear = 2025;
+    const endYear = currentYear + 4;
     for (let year = endYear; year >= startYear; year--) {
       years.push(year);
     }
@@ -107,7 +107,7 @@ function UserPayments() {
               >
                 {generateYears().map((year) => (
                   <option key={year} value={year}>
-                    {year}
+                    {year}{year === currentYear ? " (Current Year)" : ""}
                   </option>
                 ))}
               </select>
@@ -115,7 +115,7 @@ function UserPayments() {
 
             <div className="flex flex-col gap-2 md:gap-3  ">
               
-              <div className="text-center font-medium">
+              <div className="text-base sm:text-lg font-bold text-gray-900  text-center">
                 Payment Records for {selectedYear}:
               </div>
               {loading ? (

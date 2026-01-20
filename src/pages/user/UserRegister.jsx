@@ -13,6 +13,7 @@ import {
   Smartphone,
   Calendar,
   MapPinHouse,
+  Users,
 } from "lucide-react";
 import { RiParentLine } from "react-icons/ri";
 import { MdOutlineDraw } from "react-icons/md";
@@ -75,6 +76,7 @@ export default function RegistrationForm() {
     dob: null,
     subject: "",
     address: "",
+    gender: "",
     password: "",
     confirmPassword: "",
     terms: false,
@@ -164,6 +166,10 @@ export default function RegistrationForm() {
       newErrors.address = "Address is required";
     }
 
+    if (!formData.gender) {
+      newErrors.gender = "Gender is required";
+    }
+
     if (!formData.password) {
       newErrors.password = "Password is required";
     } else if (formData.password.length < 8) {
@@ -198,6 +204,7 @@ export default function RegistrationForm() {
         dob,
         subject,
         address,
+        gender,
         password,
       } = formData;
 
@@ -209,6 +216,7 @@ export default function RegistrationForm() {
         dob: formData.dob ? format(formData.dob, "yyyy-MM-dd") : "",
         subject,
         address,
+        gender,
         password,
       };
 
@@ -225,6 +233,7 @@ export default function RegistrationForm() {
           dob: null,
           subject: "",
           address: "",
+          gender: "",
           password: "",
           confirmPassword: "",
           terms: false,
@@ -464,6 +473,39 @@ export default function RegistrationForm() {
                 </div>
                 {errors.address && (
                   <p className="mt-1 text-xs text-red-500">{errors.address}</p>
+                )}
+              </div>
+
+              {/* Gender Input */}
+              <div className="mb-5">
+                <label
+                  htmlFor="gender"
+                  className="block text-sm font-medium mb-2 text-gray-700"
+                >
+                  Gender
+                </label>
+                <div className="relative">
+                  <Users
+                    size={20}
+                    className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none"
+                  />
+                  <select
+                    id="gender"
+                    name="gender"
+                    value={formData.gender}
+                    onChange={handleInputChange}
+                    className={`w-full pl-12 pr-4 py-3 rounded-2xl outline-none transition-all focus:ring-2 bg-white border border-slate-200 text-slate-900 placeholder-gray-500 focus:ring-teal-500/50 focus:border-teal-500 appearance-none ${
+                      errors.gender ? "border-red-500" : ""
+                    }`}
+                  >
+                    <option value="">Select Gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+                {errors.gender && (
+                  <p className="mt-1 text-xs text-red-500">{errors.gender}</p>
                 )}
               </div>
 

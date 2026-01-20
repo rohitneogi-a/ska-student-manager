@@ -13,10 +13,17 @@ function ManageUsers() {
   const { get, loading, error } = useHttp();
   const [users, setUsers] = useState([]);
   const [searchInput, setSearchInput] = useState("");
+  const [genderFilter, setGenderFilter] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [selectedUser, setSelectedUser] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
+  const [pagination, setPagination] = useState({
+    total: 0,
+    page: 1,
+    limit: 10,
+    totalPages: 0,
+  });
   const navigate = useNavigate();
 
   function formatDate(dateString) {
@@ -27,31 +34,34 @@ function ManageUsers() {
     return `${day}-${month}-${year}`;
   }
 
-  // Fetch all students (users) on mount
+  const currentPage = parseInt(searchParams.get("page") || "1", 10);
+
+  // Fetch students with pagination
   useEffect(() => {
     const fetchUsers = async () => {
-      const res = await get("/api/admin/allStudentsAdmin");
-      if (res && Array.isArray(res.data)) {
+      const res = await get(
+        `/api/admin/allStudentsAdmin?page=${currentPage}&limit=10`,
+      );
+      if (res && res.success) {
         setUsers(
-          res.data.map((u) => ({
+          res.data.students.map((u) => ({
             id: u._id,
             name: u.fullName,
             guardian: u.guardianName,
             phone: u.phoneNo,
-            dob: u.dob || "", // <-- keep raw value
+            dob: u.dob || "",
             subject: u.subject,
             address: u.address,
+            gender: u.gender,
             profileImage: u.profileImage,
             joined: formatDate(u.createdAt),
           })),
         );
+        setPagination(res.data.pagination);
       }
     };
     fetchUsers();
-  }, [get]);
-
-  const currentPage = parseInt(searchParams.get("page") || "1", 10);
-  const itemsPerPage = 10;
+  }, [get, currentPage]);
 
   const getInitials = (name) => {
     if (!name || typeof name !== "string") return "?";
@@ -62,7 +72,6 @@ function ManageUsers() {
       .toUpperCase();
   };
 
-  // Only "Paid" and "Due" statuses
   const getStatusColor = (status) => {
     switch (status) {
       case "PAID":
@@ -98,16 +107,12 @@ function ManageUsers() {
         user.phone.toLowerCase().includes(searchInput.toLowerCase())) ||
       (user.subject &&
         user.subject.toLowerCase().includes(searchInput.toLowerCase()));
+    
+    const matchesGender = genderFilter === "" || user.gender === genderFilter;
     const matchesStatus = statusFilter === "" || user.status === statusFilter;
-    return matchesSearch && matchesStatus;
+    
+    return matchesSearch && matchesGender && matchesStatus;
   });
-
-  const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const paginatedUsers = filteredUsers.slice(
-    startIndex,
-    startIndex + itemsPerPage,
-  );
 
   const handlePageChange = (event, value) => {
     setSearchParams({ page: value.toString() });
@@ -136,11 +141,27 @@ function ManageUsers() {
                 </label>
                 <input
                   type="text"
-                  placeholder="Name, phone, subject, or ID..."
+                  placeholder="Name, phone, subject..."
                   value={searchInput}
                   onChange={(e) => setSearchInput(e.target.value)}
                   className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg text-sm focus:outline-none focus:border-teal-500"
                 />
+              </div>
+              
+              <div className="w-full sm:w-48">
+                <label className="block text-slate-800 font-semibold text-sm mb-2">
+                  Filter by Gender
+                </label>
+                <select
+                  value={genderFilter}
+                  onChange={(e) => setGenderFilter(e.target.value)}
+                  className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg text-sm focus:outline-none focus:border-teal-500"
+                >
+                  <option value="">All Genders</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                  <option value="Other">Other</option>
+                </select>
               </div>
             </div>
 
@@ -175,9 +196,11 @@ function ManageUsers() {
                         Subject
                       </th>
                       <th className="px-6 py-4 text-left font-semibold text-slate-800 text-sm uppercase tracking-wide">
+                        Gender
+                      </th>
+                      <th className="px-6 py-4 text-left font-semibold text-slate-800 text-sm uppercase tracking-wide">
                         Joined
                       </th>
-
                       <th className="px-6 py-4 text-left font-semibold text-slate-800 text-sm uppercase tracking-wide">
                         Actions
                       </th>
@@ -187,7 +210,7 @@ function ManageUsers() {
                     {loading ? (
                       <tr>
                         <td
-                          colSpan={5}
+                          colSpan={6}
                           className="py-8 text-center"
                         >
                           <div className="flex justify-center items-center">
@@ -201,23 +224,23 @@ function ManageUsers() {
                     ) : error ? (
                       <tr>
                         <td
-                          colSpan={5}
+                          colSpan={6}
                           className="text-center py-8 text-red-500"
                         >
                           {error}
                         </td>
                       </tr>
-                    ) : paginatedUsers.length === 0 ? (
+                    ) : filteredUsers.length === 0 ? (
                       <tr>
                         <td
-                          colSpan={5}
+                          colSpan={6}
                           className="text-center py-8 text-gray-500"
                         >
                           No students found.
                         </td>
                       </tr>
                     ) : (
-                      paginatedUsers.map((user) => (
+                      filteredUsers.map((user) => (
                         <tr
                           key={user.id}
                           className="border-b border-gray-100 hover:bg-gray-50 transition-colors card-hover cursor-pointer"
@@ -240,7 +263,6 @@ function ManageUsers() {
                                 <span className="text-slate-800 font-medium">
                                   {user.name}
                                 </span>
-
                                 <span className="text-xs text-gray-500"></span>
                               </div>
                             </div>
@@ -250,6 +272,9 @@ function ManageUsers() {
                           </td>
                           <td className="px-6 py-4 text-gray-600">
                             {user.subject}
+                          </td>
+                          <td className="px-6 py-4 text-gray-600">
+                            {user.gender}
                           </td>
                           <td className="px-6 py-4 text-gray-600">
                             {user.joined}
@@ -279,13 +304,14 @@ function ManageUsers() {
               {/* Pagination */}
               <div className="px-6 py-5 border-t-2 border-gray-100 flex flex-col md:flex-row items-center justify-between gap-4">
                 <p className="text-gray-600 text-sm">
-                  Showing {startIndex + 1}-
-                  {Math.min(startIndex + itemsPerPage, filteredUsers.length)} of{" "}
-                  {filteredUsers.length} students
+                  Showing{" "}
+                  {((currentPage - 1) * pagination.limit) + 1}-
+                  {Math.min(currentPage * pagination.limit, pagination.total)} of{" "}
+                  {pagination.total} students
                 </p>
                 <Pagination
                   page={currentPage}
-                  count={totalPages}
+                  count={pagination.totalPages}
                   onChange={handlePageChange}
                   sx={{
                     "& .MuiPaginationItem-root": {
