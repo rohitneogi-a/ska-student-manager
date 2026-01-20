@@ -55,7 +55,7 @@ export default function AdminProfile() {
   if (loading || !adminData) {
     return (
       <AdminLayout>
-        <div className="min-h-screen flex items-center justify-center p-4 bg-linear-to-br from-[#264653] via-[#2a9d8f] to-[#264653]">
+        <div className="min-h-screen flex items-center justify-center p-4 ">
           <div className="text-center">
             <RippleSpinner size={148} color="hsl(173, 80%, 40%)" />
           </div>

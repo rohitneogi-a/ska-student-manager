@@ -5,6 +5,7 @@ import Footertxt from '../../components/common/Footertxt';
 import RippleSpinner from "../../components/common/RippleSpinner";
 import { useHttp } from "../../components/hooks/useHttp";
 import StatusDot from "../../components/common/StatusDot";
+import UserPaymentDetailsModal from "../../components/user/UserPaymentDetailsModal";
 
 function getStatusColor(status) {
   switch (status) {
@@ -31,6 +32,8 @@ const getStatusDotColor = (status) => {
 function UserPayments() {
   const { get, loading, error } = useHttp();
   const [salaryHistory, setSalaryHistory] = useState([]);
+  const [selectedPayment, setSelectedPayment] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const currentYear = new Date().getFullYear();
 
@@ -63,6 +66,11 @@ function UserPayments() {
     return `${day}-${month}-${year}`;
   };
 
+  const handleRowClick = (record) => {
+    setSelectedPayment(record);
+    setIsModalOpen(true);
+  };
+
   return (
     <UserLayout>
       <div className="min-h-screen flex flex-col">
@@ -90,7 +98,8 @@ function UserPayments() {
                   return (
                     <div
                       key={idx}
-                      className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 p-3 sm:p-4 bg-white rounded-lg shadow-sm hover:shadow-md transition card-hover card-animate"
+                      onClick={() => handleRowClick(record)}
+                      className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 p-3 sm:p-4 bg-white rounded-lg shadow-sm hover:shadow-md transition card-hover card-animate cursor-pointer"
                     >
                       <div className="flex-1 min-w-0">
                         <h4 className="text-sm sm:text-base font-semibold truncate text-gray-900">
@@ -127,6 +136,13 @@ function UserPayments() {
           </div>
         </div>
         <Footertxt />
+
+        {/* Payment Details Modal */}
+        <UserPaymentDetailsModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          paymentData={selectedPayment}
+        />
       </div>
     </UserLayout>
   );
