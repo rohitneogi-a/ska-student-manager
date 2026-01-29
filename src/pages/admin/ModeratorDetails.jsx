@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { ConfirmDeleteModal } from "../../components/common/ConfirmDeleteModal";
 import {
   PencilLine,
   Mail,
@@ -21,6 +22,7 @@ import BackButton from "../../components/common/BackButton";
 import toast from "react-hot-toast";
 import { useHttp } from "../../components/hooks/useHttp";
 import ViewModal from "../../components/admin/ViewModal";
+import RippleSpinner from "../../components/common/RippleSpinner";
 
 function ModeratorDetails() {
   const { id } = useParams();
@@ -120,7 +122,7 @@ function ModeratorDetails() {
   const handleDelete = async () => {
     toast.loading("Deleting moderator...", { id: "delete" });
     try {
-      const response = await del(`/api/admin/moderator/${id}`);
+      const response = await del(`/api/moderator/deleteModerator/${id}`);
 
       if (response.success) {
         toast.success("Moderator deleted successfully", { id: "delete" });
@@ -177,7 +179,7 @@ function ModeratorDetails() {
     return (
       <AdminLayout>
         <div className="flex justify-center items-center min-h-screen font-page-title">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-600"></div>
+          <RippleSpinner size={148} color="hsl(173, 80%, 40%)" />
         </div>
       </AdminLayout>
     );
@@ -186,19 +188,19 @@ function ModeratorDetails() {
   return (
     <AdminLayout>
       <div className="p-6 md:p-8 lg:p-10 min-h-screen font-page-title ">
-        <div className="mb-6">
+        <div className="mb-6 cursor-pointer">
           <BackButton to="/admin/moderators" label="Back" />
         </div>
 
         <div className="flex flex-col gap-6">
           {/* Header Card */}
-          <div className="bg-white shadow-lg rounded-xl p-6 border border-slate-200 font-page-title card-hover">
+          <div className="bg-white shadow-lg rounded-xl p-6 border border-slate-200 font-page-title card-hover ">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
               <h1 className="text-2xl font-bold text-slate-800 flex items-center gap-2">
                 Moderator Details
                 {!editMode && (
                   <button
-                    className="ml-2 text-cyan-600 hover:text-cyan-800 transition-colors"
+                    className="ml-2 text-cyan-600 hover:text-cyan-800 transition-colors cursor-pointer"
                     onClick={() => setEditMode(true)}
                     title="Edit"
                   >
@@ -300,7 +302,7 @@ function ModeratorDetails() {
                     disabled={!editMode}
                   />
                 </div>
-                <div >
+                <div>
                   <label className="text-sm font-semibold text-slate-700 mb-2 flex items-center gap-2">
                     <MapPin className="w-4 h-4 text-cyan-600" />
                     Address
@@ -457,34 +459,14 @@ function ModeratorDetails() {
 
       {/* Delete Confirmation Modal */}
       {showDeleteModal && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex justify-center items-center p-4">
-          <div className="bg-white rounded-xl shadow-2xl p-8 max-w-md w-full border border-slate-200 animate-fadeIn">
-            <h2 className="text-2xl font-bold text-slate-800 text-center mb-4">
-              Delete Moderator?
-            </h2>
-            <p className="text-center text-slate-600 mb-6">
-              Are you sure you want to permanently delete{" "}
-              <span className="font-bold text-slate-800">
-                {moderator?.fullName}
-              </span>
-              ? This action cannot be undone.
-            </p>
-            <div className="flex gap-4">
-              <button
-                className="flex-1 px-6 py-2.5 rounded-lg bg-slate-200 text-slate-800 font-semibold hover:bg-slate-300 transition-colors"
-                onClick={() => setShowDeleteModal(false)}
-              >
-                Cancel
-              </button>
-              <button
-                className="flex-1 px-6 py-2.5 rounded-lg bg-gradient-to-r from-red-600 to-red-700 text-white font-semibold hover:from-red-700 hover:to-red-800 transition-all shadow-md"
-                onClick={handleDelete}
-              >
-                Delete
-              </button>
-            </div>
-          </div>
-        </div>
+        <ConfirmDeleteModal
+          isOpen={showDeleteModal}
+          onClose={() => setShowDeleteModal(false)}
+          onConfirm={handleDelete}
+          title="Delete Moderator"
+          message="Are you sure you want to delete this moderator? This action cannot be undone."
+          confirmText="Delete"
+        />
       )}
 
       {/* Student View Modal */}
