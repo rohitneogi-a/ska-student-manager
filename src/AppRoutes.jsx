@@ -12,6 +12,7 @@ import AdminProfile from "./pages/admin/AdminProfile.jsx";
 import UserPayments from "./pages/user/UserPayments.jsx";
 import ManageModerators from "./pages/admin/ManageModerators.jsx";
 import ManageUsers from "./pages/admin/ManageUsers.jsx";
+import ModeratorDetails from "./pages/admin/ModeratorDetails.jsx";
 
 // --- Route Guards ---
 function LoginRoute() {
@@ -92,6 +93,14 @@ export default function AppRoutes() {
         element={
           <ProtectedRoute allowedRoles={["admin"]}>
             <ManageModerators />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/moderators/:id"
+        element={
+          <ProtectedRoute allowedRoles={["admin"]}>
+            <ModeratorDetails />
           </ProtectedRoute>
         }
       />

@@ -51,19 +51,25 @@ function AdminHeader() {
 
         {/* Desktop Menu (large screens only) */}
         <div className="hidden lg:flex items-center gap-2">
-          {menuItems.map(([label, path]) => (
-            <button
-              key={label}
-              onClick={() => navigate(path)}
-              className={`px-4 py-2 rounded-xl font-semibold transition
-                ${location.pathname === path
-                  ? "bg-white/40 text-cyan-700 border border-white/40 btn-primary"
-                  : "hover:text-white-500 btn-primary"}
-              `}
-            >
-              {label}
-            </button>
-          ))}
+          {menuItems.map(([label, path]) => {
+            const isActive = path === "/admin/moderators" 
+              ? location.pathname.startsWith(path)
+              : location.pathname === path;
+            
+            return (
+              <button
+                key={label}
+                onClick={() => navigate(path)}
+                className={`px-4 py-2 rounded-xl font-semibold transition
+                  ${isActive
+                    ? "bg-white/40 text-cyan-700 border border-white/40 btn-primary"
+                    : "hover:text-white-500 btn-primary"}
+                `}
+              >
+                {label}
+              </button>
+            );
+          })}
 
           <button
             onClick={handleLogout}
@@ -92,22 +98,28 @@ function AdminHeader() {
         `}
       >
         <div className="flex flex-col gap-2 p-4 text-white">
-          {menuItems.map(([label, path]) => (
-            <button
-              key={label}
-              onClick={() => {
-                navigate(path)
-                setMobileMenuOpen(false)
-              }}
-              className={`py-3 px-4 rounded-lg text-left text-base transition 
-                ${location.pathname === path
-                  ? "bg-white/30 border btn-primary border-white/40"
-                  : "hover:bg-white/10 btn-primary"}
-              `}
-            >
-              {label}
-            </button>
-          ))}
+          {menuItems.map(([label, path]) => {
+            const isActive = path === "/admin/moderators" 
+              ? location.pathname.startsWith(path)
+              : location.pathname === path;
+            
+            return (
+              <button
+                key={label}
+                onClick={() => {
+                  navigate(path)
+                  setMobileMenuOpen(false)
+                }}
+                className={`py-3 px-4 rounded-lg text-left text-base transition 
+                  ${isActive
+                    ? "bg-white/30 border btn-primary border-white/40"
+                    : "hover:bg-white/10 btn-primary"}
+                `}
+              >
+                {label}
+              </button>
+            );
+          })}
 
           <button
             onClick={() => {

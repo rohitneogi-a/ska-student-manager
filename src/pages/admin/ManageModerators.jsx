@@ -15,6 +15,8 @@ import Footertxt from "../../components/common/Footertxt";
 import ModeratorRegisterModal from "../moderator/ModeratorRegister";
 import toast from "react-hot-toast";
 import { ConfirmDeleteModal } from "../../components/common/ConfirmDeleteModal";
+import ModeratorDetails from "./ModeratorDetails";
+import { useNavigate } from "react-router-dom";
 
 export default function ManageModerators() {
   const { get, del, loading, error } = useHttp();
@@ -60,7 +62,7 @@ export default function ManageModerators() {
       }
     };
     fetchModerators();
-  }, [get]); // <-- Add 'get' dependency
+  }, []);
 
   const handleAddModerator = () => {
     setEditingId(null);
@@ -165,6 +167,8 @@ export default function ManageModerators() {
         return "bg-gray-500";
     }
   };
+
+  const navigate = useNavigate();
 
   // Add this function to refresh the list after registration
   const refreshModerators = async () => {
@@ -293,8 +297,9 @@ export default function ManageModerators() {
                   {/* Action Buttons */}
                   <div className="flex gap-3 ">
                     <button
-                      onClick={() => handleEditModerator(mod.id)}
+                      onClick={() => navigate(`/admin/moderators/${mod.id}`)}
                       className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-yellow-400 py-2.5 font-semibold text-white transition-colors hover:bg-yellow-500 btn-primary "
+                      
                     >
                       <ChartNoAxesGantt className="h-4 w-4" />
                       View More

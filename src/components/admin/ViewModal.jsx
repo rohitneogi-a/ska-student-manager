@@ -45,7 +45,7 @@ function getMonthName(monthNumber) {
   return monthNames[monthNumber - 1] || "N/A";
 }
 
-function ViewModal({ selectedUser, setIsModalOpen }) {
+function ViewModal({ selectedUser, setIsModalOpen, hidePayment }) {
   const { get, loading, error } = useHttp();
   const [paymentDetails, setPaymentDetails] = useState(null);
   const [isStudentDetailsOpen, setIsStudentDetailsOpen] = useState(false);
@@ -93,7 +93,7 @@ function ViewModal({ selectedUser, setIsModalOpen }) {
   }, []);
 
   const fetchPaymentDetails = async () => {
-    if (selectedUser?.id) {
+    if (selectedUser?.id && !hidePayment) {
       const res = await get(`/api/admin/${selectedUser.id}/payments?year=${selectedYear}&month=${selectedMonth}`);
       if (res && res.success) {
         setPaymentDetails(res.data);
@@ -104,8 +104,10 @@ function ViewModal({ selectedUser, setIsModalOpen }) {
   };
 
   useEffect(() => {
-    fetchPaymentDetails();
-  }, [selectedUser, get, selectedYear, selectedMonth]);
+    if (!hidePayment) {
+      fetchPaymentDetails();
+    }
+  }, [selectedUser, get, selectedYear, selectedMonth, hidePayment]);
 
   const handlePayNowClick = (payment) => {
     setSelectedPayment(payment);
@@ -190,110 +192,136 @@ function ViewModal({ selectedUser, setIsModalOpen }) {
           {/* Payment Details Accordion */}
           <div className="border border-gray-200 rounded-lg">
             <button
-              onClick={() => setIsPaymentDetailsOpen(!isPaymentDetailsOpen)}
-              className="w-full flex items-center justify-between p-4 hover:bg-gray-50 transition"
+              onClick={() => !hidePayment && setIsPaymentDetailsOpen(!isPaymentDetailsOpen)}
+              className={`w-full flex items-center justify-between p-4 transition ${
+                hidePayment 
+                  ? 'cursor-not-allowed bg-gray-50' 
+                  : 'hover:bg-gray-50 cursor-pointer'
+              }`}
+              disabled={hidePayment}
             >
               <span className="font-semibold text-slate-800">Payment Details</span>
-              <ChevronDown className={`w-5 h-5 transition-transform ${isPaymentDetailsOpen ? 'rotate-180' : ''}`} />
+              <ChevronDown className={`w-5 h-5 transition-transform ${isPaymentDetailsOpen && !hidePayment ? 'rotate-180' : ''}`} />
             </button>
-            {isPaymentDetailsOpen && (
-              <div className="p-2 pt-0">
-                {/* Year and Month Selector */}
-                <div className="mb-4 grid grid-cols-2 gap-3">
-                  <div>
-                    <label className="text-xs text-gray-500 mb-2 block">Select Year</label>
-                    <select
-                      value={selectedYear}
-                      onChange={(e) => setSelectedYear(parseInt(e.target.value))}
-                      className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg text-sm focus:outline-none"
-                    >
-                      {generateYears().map((year) => (
-                        <option key={year} value={year}>
-                          {year} {year === currentYear ? "(Current)" : ""}
-                        </option>
-                      ))}
-                    </select>
+            
+            {hidePayment ? (
+              <div className="p-4 bg-amber-50 border-t border-gray-200">
+                <div className="flex items-start gap-3">
+                  <div className="flex-shrink-0 mt-0.5">
+                    <svg className="h-5 w-5 text-amber-600" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                    </svg>
                   </div>
                   <div>
-                    <label className="text-xs text-gray-500 mb-2 block">Select Month</label>
-                    <select
-                      value={selectedMonth}
-                      onChange={(e) => setSelectedMonth(parseInt(e.target.value))}
-                      className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg text-sm focus:outline-none"
-                    >
-                      {months.map((month) => (
-                        <option key={month.value} value={month.value}>
-                          {month.label} {month.value === currentMonth && selectedYear === currentYear ? "(Current)" : ""}
-                        </option>
-                      ))}
-                    </select>
+                    <h3 className="text-sm font-semibold text-amber-800">Payment Details Not Available</h3>
+                    <p className="text-sm text-amber-700 mt-1">
+                      Payment details are not visible for students created by moderators. Only admin-created students display payment information.
+                    </p>
                   </div>
-                </div>
-
-                {/* Payment Details Table */}
-                <div className="w-full ">
-                  {loading && (
-                    <div className="flex justify-center py-8">
-                      <RippleSpinner size={48} color="hsl(173, 80%, 40%)" />
-                    </div>
-                  )}
-                  {error && <p className="text-center py-4 text-red-500">{error}</p>}
-                  {!loading && !error && paymentDetails && Array.isArray(paymentDetails) && paymentDetails.length > 0 ? (
-                    <div className="w-full  space-y-2">
-                      {paymentDetails.map((payment, idx) => (
-                        <div key={idx} className={`p-4 rounded-lg border border-gray-200 ${getStatusColor(payment.status)}`}>
-                          <div className="grid grid-cols-3 gap-4">
-                            <div>
-                              <p className="text-sm  text-gray-500 mb-1">Month</p>
-                              <p className="font-medium">{getMonthName(payment.month)}</p>
-                            </div>
-                            <div>
-                              <p className="text-sm text-gray-500 mb-1">Status</p>
-                              <div className="flex items-center gap-2">
-                                <StatusDot 
-                                  pingColor={getStatusDotColor(payment.status)}
-                                  dotColor={getStatusDotColor(payment.status)}
-                                />
-                                <span className="font-medium text-sm">{payment.status}</span>
-                              </div>
-                            </div>
-                            <div>
-                              <p className="text-sm text-gray-500 mb-1">{payment.status === "DUE" ? "Action" : "Paid On"}</p>
-                              {payment.status === "DUE" ? (
-                                <button
-                                  onClick={() => handlePayNowClick(payment)}
-                                  className="p-2 bg-teal-500 text-white rounded-lg hover:bg-teal-600 transition text-sm font-semibold"
-                                >
-                                  Pay Now
-                                </button>
-                              ) : (
-                                <p className="font-medium text-[#2a9d8f]">{payment.date ? formatDate(payment.date) : "N/A"}</p>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    !loading && <p className="text-center py-4 text-gray-500">No payment details found for the selected period.</p>
-                  )}
                 </div>
               </div>
+            ) : (
+              isPaymentDetailsOpen && (
+                <div className="p-2 pt-0">
+                  {/* Year and Month Selector */}
+                  <div className="mb-4 grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="text-xs text-gray-500 mb-2 block">Select Year</label>
+                      <select
+                        value={selectedYear}
+                        onChange={(e) => setSelectedYear(parseInt(e.target.value))}
+                        className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg text-sm focus:outline-none"
+                      >
+                        {generateYears().map((year) => (
+                          <option key={year} value={year}>
+                            {year} {year === currentYear ? "(Current)" : ""}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <div>
+                      <label className="text-xs text-gray-500 mb-2 block">Select Month</label>
+                      <select
+                        value={selectedMonth}
+                        onChange={(e) => setSelectedMonth(parseInt(e.target.value))}
+                        className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg text-sm focus:outline-none"
+                      >
+                        {months.map((month) => (
+                          <option key={month.value} value={month.value}>
+                            {month.label} {month.value === currentMonth && selectedYear === currentYear ? "(Current)" : ""}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+
+                  {/* Payment Details Table */}
+                  <div className="w-full ">
+                    {loading && (
+                      <div className="flex justify-center py-8">
+                        <RippleSpinner size={48} color="hsl(173, 80%, 40%)" />
+                      </div>
+                    )}
+                    {error && <p className="text-center py-4 text-red-500">{error}</p>}
+                    {!loading && !error && paymentDetails && Array.isArray(paymentDetails) && paymentDetails.length > 0 ? (
+                      <div className="w-full  space-y-2">
+                        {paymentDetails.map((payment, idx) => (
+                          <div key={idx} className={`p-4 rounded-lg border border-gray-200 ${getStatusColor(payment.status)}`}>
+                            <div className="grid grid-cols-3 gap-4">
+                              <div>
+                                <p className="text-sm  text-gray-500 mb-1">Month</p>
+                                <p className="font-medium">{getMonthName(payment.month)}</p>
+                              </div>
+                              <div>
+                                <p className="text-sm text-gray-500 mb-1">Status</p>
+                                <div className="flex items-center gap-2">
+                                  <StatusDot 
+                                    pingColor={getStatusDotColor(payment.status)}
+                                    dotColor={getStatusDotColor(payment.status)}
+                                  />
+                                  <span className="font-medium text-sm">{payment.status}</span>
+                                </div>
+                              </div>
+                              <div>
+                                <p className="text-sm text-gray-500 mb-1">{payment.status === "DUE" ? "Action" : "Paid On"}</p>
+                                {payment.status === "DUE" ? (
+                                  <button
+                                    onClick={() => handlePayNowClick(payment)}
+                                    className="p-2 bg-teal-500 text-white rounded-lg hover:bg-teal-600 transition text-sm font-semibold"
+                                  >
+                                    Pay Now
+                                  </button>
+                                ) : (
+                                  <p className="font-medium text-[#2a9d8f]">{payment.date ? formatDate(payment.date) : "N/A"}</p>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      !loading && <p className="text-center py-4 text-gray-500">No payment details found for the selected period.</p>
+                    )}
+                  </div>
+                </div>
+              )
             )}
           </div>
         </div>
       </div>
 
       {/* Payment Modal */}
-      <PaymentModal
-        isOpen={isPaymentModalOpen}
-        onClose={() => setIsPaymentModalOpen(false)}
-        userId={selectedUser.id}
-        year={selectedYear}
-        month={selectedMonth}
-        monthName={getMonthName(selectedMonth)}
-        onPaymentSuccess={handlePaymentSuccess}
-      />
+      {!hidePayment && (
+        <PaymentModal
+          isOpen={isPaymentModalOpen}
+          onClose={() => setIsPaymentModalOpen(false)}
+          userId={selectedUser.id}
+          year={selectedYear}
+          month={selectedMonth}
+          monthName={getMonthName(selectedMonth)}
+          onPaymentSuccess={handlePaymentSuccess}
+        />
+      )}
     </>
   );
 }
