@@ -187,14 +187,14 @@ function ModeratorDetails() {
 
   return (
     <AdminLayout>
-      <div className="p-6 md:p-8 lg:p-10 min-h-screen font-page-title ">
+      <div className="p-2 md:p-8 lg:p-10 min-h-screen font-page-title ">
         <div className="mb-6 cursor-pointer">
           <BackButton to="/admin/moderators" label="Back" />
         </div>
 
         <div className="flex flex-col gap-6">
           {/* Header Card */}
-          <div className="bg-white shadow-lg rounded-xl p-6 border border-slate-200 font-page-title card-hover card-animate ">
+          <div className="bg-white shadow-lg rounded-xl p-4 border border-slate-200 font-page-title card-hover card-animate ">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
               <h1 className="text-2xl font-bold text-slate-800 flex items-center gap-2">
                 Moderator Details
@@ -234,7 +234,7 @@ function ModeratorDetails() {
                 <button
                   className={`flex-1 sm:flex-none px-4 py-2 rounded-lg text-sm font-semibold text-white transition-all ${
                     editMode
-                      ? "bg-gradient-to-r from-cyan-600 to-teal-600 hover:from-cyan-700 hover:to-teal-700 shadow-md"
+                      ? "bg-linear-to-r from-cyan-600 to-teal-600 hover:from-cyan-700 hover:to-teal-700 shadow-md"
                       : "bg-slate-300 cursor-not-allowed"
                   }`}
                   disabled={!editMode}
