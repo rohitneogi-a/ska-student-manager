@@ -194,7 +194,7 @@ function ModeratorDetails() {
 
         <div className="flex flex-col gap-6">
           {/* Header Card */}
-          <div className="bg-white shadow-lg rounded-xl p-6 border border-slate-200 font-page-title card-hover ">
+          <div className="bg-white shadow-lg rounded-xl p-6 border border-slate-200 font-page-title card-hover card-animate ">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
               <h1 className="text-2xl font-bold text-slate-800 flex items-center gap-2">
                 Moderator Details
@@ -324,7 +324,7 @@ function ModeratorDetails() {
           </div>
 
           {/* Activity Section */}
-          <div className="bg-white shadow-lg rounded-xl p-6 border border-slate-200 card-hover">
+          <div className="bg-white shadow-lg rounded-xl p-6 border border-slate-200 card-hover card-animate">
             <h3 className="text-xl font-bold text-slate-800 mb-4 flex items-center gap-2">
               <Calendar className="w-5 h-5 text-cyan-600" />
               Account Information
@@ -361,7 +361,7 @@ function ModeratorDetails() {
           </div>
 
           {/* Students List Section */}
-          <div className="bg-white shadow-lg rounded-xl overflow-hidden border border-slate-200 card-hover">
+          <div className="bg-white shadow-lg rounded-xl overflow-hidden border border-slate-200 card-hover card-animate">
             {/* Table Header */}
             <div className="px-6 py-5 border-b-2 border-gray-100 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <h3 className="text-lg font-semibold text-slate-800">
