@@ -13,6 +13,10 @@ import UserPayments from "./pages/user/UserPayments.jsx";
 import ManageModerators from "./pages/admin/ManageModerators.jsx";
 import ManageUsers from "./pages/admin/ManageUsers.jsx";
 import ModeratorDetails from "./pages/admin/ModeratorDetails.jsx";
+import ModeratorLogin from "./pages/moderator/ModeratorLogin.jsx";
+import ModeratorDashboard from "./pages/moderator/ModeratorDashboard.jsx";
+import ModeratorUsers from "./pages/moderator/ModeratorUsers.jsx";
+import ModeratorProfile from "./pages/moderator/ModeratorProfile.jsx";
 
 // --- Route Guards ---
 function LoginRoute() {
@@ -31,6 +35,14 @@ function AdminLoginRoute() {
   if (token && role === "admin") return <Navigate to="/admin/dashboard" replace />;
   if (token && role === "user") return <Navigate to="/dashboard" replace />;
   return <AdminLogin />;
+}
+function ModeratorLoginRoute() {
+  const { role } = useLogin();
+  const token = localStorage.getItem("Token");
+
+  if (token && role === "moderator") return <Navigate to="/moderator/dashboard" replace />;
+  if (token && role === "user") return <Navigate to="/dashboard" replace />;
+  return <ModeratorLogin />;
 }
 
 function HomeRoute() {
@@ -51,7 +63,7 @@ export default function AppRoutes() {
       <Route path="/register" element={<UserRegister />} />
       <Route path="/login" element={<LoginRoute />} />
       <Route path="/admin/login" element={<AdminLoginRoute />} />
-
+      <Route path="/moderator/login" element={<ModeratorLoginRoute />} />
       {/* User Protected Routes */}
       <Route
         path="/dashboard"
@@ -118,6 +130,33 @@ export default function AppRoutes() {
         element={
           <ProtectedRoute allowedRoles={["admin"]}>
             <AdminProfile />
+          </ProtectedRoute>
+        }
+      />
+
+      {/* Moderator Protected Routes */}
+
+      <Route
+        path="/moderator/dashboard"
+        element={
+          <ProtectedRoute allowedRoles={["moderator"]}>
+            <ModeratorDashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/moderator/users"
+        element={
+          <ProtectedRoute allowedRoles={["moderator"]}>
+            <ModeratorUsers />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/moderator/profile"
+        element={
+          <ProtectedRoute allowedRoles={["moderator"]}>
+            <ModeratorProfile />
           </ProtectedRoute>
         }
       />

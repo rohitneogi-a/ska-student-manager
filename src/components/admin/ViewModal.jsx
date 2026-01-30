@@ -208,7 +208,7 @@ function ViewModal({ selectedUser, setIsModalOpen, hidePayment }) {
             {hidePayment ? (
               <div className="p-4 bg-amber-50 border-t border-gray-200">
                 <div className="flex items-start gap-3">
-                  <div className="flex-shrink-0 mt-0.5">
+                  <div className="shrink-0 mt-0.5">
                     <TriangleAlert className="h-5 w-5 text-amber-600" />
                   </div>
                   <div>
