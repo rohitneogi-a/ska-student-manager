@@ -1,34 +1,34 @@
-import { Users, BookOpen, Clock, DollarSign } from 'lucide-react'
+import { Users, BookOpen } from 'lucide-react'
 
 export default function OverviewCards() {
   const cards = [
     {
+      id: 'total-users',
       value: '248',
       label: 'Total Users',
       icon: Users,
-      bgColor: 'bg-teal-50',
       iconColor: 'text-teal-600',
       iconBg: 'bg-teal-100',
     },
     {
+      id: 'active-students',
       value: '186',
       label: 'Active Students',
       icon: BookOpen,
-      bgColor: 'bg-amber-50',
       iconColor: 'text-amber-600',
       iconBg: 'bg-amber-100',
     },
   ]
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-6 mb-8">
-      {cards.map((card, index) => {
-        const IconComponent = card.icon
+    <div className="grid grid-cols-2 gap-6 ">
+      {cards.map(card => {
+        const Icon = card.icon
 
         return (
           <div
-            key={index}
-            className="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow hover:scale-105 duration-300"
+            key={card.id}
+            className= "font-page-title bg-white p-6 rounded-xl shadow-md card-hover card-animate transform hover:shadow-lg "
           >
             <div className="flex justify-between items-start">
               <div>
@@ -41,9 +41,7 @@ export default function OverviewCards() {
               </div>
 
               <div className={`${card.iconBg} p-3 rounded-lg`}>
-                <IconComponent
-                  className={`w-6 h-6 ${card.iconColor}`}
-                />
+                <Icon className={`w-6 h-6 ${card.iconColor}`} />
               </div>
             </div>
           </div>

@@ -42,7 +42,7 @@ export default function ModeratorLogin() {
       toast.success("Login successful!");
       setemail("");
       setPassword("");
-      navigate("/dashboard");
+      navigate("/moderator/dashboard"); 
     } else {
       toast.error(result?.message || "Login failed.");
     }

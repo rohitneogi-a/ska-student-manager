@@ -14,21 +14,22 @@ import toast from "react-hot-toast"
 import AdminLayout from "../../layouts/AdminLayout"
 import RippleSpinner from "../../components/common/RippleSpinner"
 import Footertxt from "../../components/common/Footertxt";
+import ModeratorLayout from "../../layouts/ModeratorLayout"
 
 export default function ModeratorProfile() {
   const [toastMsg, setToastMsg] = useState(null)
-  const [adminData, setAdminData] = useState(null)
+  const [moderatorData, setModeratorData] = useState(null)
   const { get, loading } = useHttp()
   const navigate = useNavigate()
 
   useEffect(() => {
-    fetchAdminProfile()
+    fetchModeratorProfile()
   }, [])
 
-  const fetchAdminProfile = async () => {
+  const fetchModeratorProfile = async () => {
     const result = await get("/api/moderator/profile")
     if (result?.success) {
-      setAdminData(result.data)
+      setModeratorData(result.data?.moderator)
     } else {
       toast.error(result?.message || "Failed to fetch profile")
       if (result?.message?.toLowerCase().includes("unauthorized")) {
@@ -44,33 +45,29 @@ export default function ModeratorProfile() {
     setTimeout(() => setToastMsg(null), 3000)
   }
 
-
-
   const handleEditProfile = () => {
     showToast("Opening profile editor...")
   }
 
-
-
-  if (loading || !adminData) {
+  if (loading || !moderatorData) {
     return (
-      <AdminLayout>
+      <ModeratorLayout>
         <div className="min-h-screen flex items-center justify-center p-4 ">
           <div className="text-center">
             <RippleSpinner size={148} color="hsl(173, 80%, 40%)" />
           </div>
         </div>
         <Footertxt />
-      </AdminLayout>
+      </ModeratorLayout>
     )
   }
 
-  const name = adminData?.fullName || adminData?.name || "User"
-  const email = adminData?.email || "N/A"
-  const address = adminData?.address || "N/A"
-  const phone = adminData?.phoneNo || adminData?.phone || "N/A"
-  const memberSince = adminData?.createdAt
-    ? new Date(adminData.createdAt).toLocaleDateString('en-US', {
+  const name = moderatorData?.fullName || "User"
+  const email = moderatorData?.email || "N/A"
+  const address = moderatorData?.address || "N/A"
+  const phone = moderatorData?.phoneNo || "N/A"
+  const memberSince = moderatorData?.createdAt
+    ? new Date(moderatorData.createdAt).toLocaleDateString('en-US', {
         year: 'numeric',
         month: 'long',
         day: 'numeric'
@@ -82,9 +79,10 @@ export default function ModeratorProfile() {
     .join("")
     .toUpperCase()
     .slice(0, 2)
+  const profileImage = moderatorData?.profileImage
 
   return (
-    <AdminLayout>
+    <ModeratorLayout>
       <div className="min-h-screen flex items-center justify-center relative overflow-hidden font-alert-card  px-4 md:px-8 lg:px-16">
 
         {/* Background Orbs */}
@@ -100,16 +98,25 @@ export default function ModeratorProfile() {
           {/* Header */}
           <div className="text-center mb-6 md:mb-8">
             <div className="inline-block relative mb-4 md:mb-6">
-              <div className="w-16 h-16 md:w-20 md:h-20 bg-linear-to-br from-[#e9c46a] to-[#f4a261] rounded-3xl flex items-center justify-center shadow-[0_0_30px_rgba(233,196,106,0.3)]">
-                <span className="text-xl md:text-2xl font-bold text-gray-800">
-                  {avatarInitials}
-                </span>
-              </div>
+              {profileImage ? (
+                <img
+                  src={profileImage}
+                  alt={name}
+                  className="w-16 h-16 md:w-20 md:h-20 rounded-3xl object-cover shadow-[0_0_30px_rgba(233,196,106,0.3)]"
+                />
+              ) : (
+                <div className="w-16 h-16 md:w-20 md:h-20 bg-linear-to-br from-[#e9c46a] to-[#f4a261] rounded-3xl flex items-center justify-center shadow-[0_0_30px_rgba(233,196,106,0.3)]">
+                  <span className="text-xl md:text-2xl font-bold text-gray-800">
+                    {avatarInitials}
+                  </span>
+                </div>
+              )}
             </div>
             <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-2 flex items-center justify-center gap-2 text-gray-900">
-              {name}<div className="inline-flex items-center justify-center rounded-2xl bg-green-300/20 p-1">
-  <CheckCircle className="w-4 h-4 md:w-5 md:h-5 text-[#0e3632]" />
-</div>
+              {name}
+              <div className="inline-flex items-center justify-center rounded-2xl bg-green-300/20 p-1">
+                <CheckCircle className="w-4 h-4 md:w-5 md:h-5 text-[#0e3632]" />
+              </div>
             </h1>
           </div>
 
@@ -120,7 +127,6 @@ export default function ModeratorProfile() {
               iconBg="from-[#dbe7e4]/70 via-[#c7e3dc]/70 to-[#dbe7e4]/70"
               label="Email Address"
               value={email}
-
             />
             <InfoItem
               icon={<MapPinHouse className="w-5 h-5 md:w-6 md:h-6" />}
@@ -162,7 +168,7 @@ export default function ModeratorProfile() {
         )}
       </div>
       <Footertxt />
-    </AdminLayout>
+    </ModeratorLayout>
   )
 }
 

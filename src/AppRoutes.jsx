@@ -51,6 +51,7 @@ function HomeRoute() {
 
   if (token && role === "user") return <Navigate to="/dashboard" replace />;
   if (token && role === "admin") return <Navigate to="/admin/dashboard" replace />;
+  if (token && role === "moderator") return <Navigate to="/moderator/dashboard" replace />;
   return <LandingPage />;
 }
 
