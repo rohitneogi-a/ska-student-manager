@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from "react";
-import ModeratorLayout from '../../layouts/ModeratorLayout'
-import OverviewCards from '../../components/moderator/OverviewCards'
+import ModeratorLayout from "../../layouts/ModeratorLayout";
+import OverviewCards from "../../components/moderator/OverviewCards";
 import { CircleAlert, Eye, Pencil, Trash2 } from "lucide-react";
 import { useHttp } from "../../components/hooks/useHttp";
 import RippleSpinner from "../../components/common/RippleSpinner";
+import ViewModal from "../../components/admin/ViewModal";
 
 export default function DashboardSection() {
   const { get, loading, error } = useHttp();
   const [students, setStudents] = useState([]);
   const [searchInput, setSearchInput] = useState("");
   const [genderFilter, setGenderFilter] = useState("");
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     fetchStudents();
@@ -30,6 +33,43 @@ export default function DashboardSection() {
     return `${day}-${month}-${year}`;
   }
 
+    const getStatusDotColor = (status) => {
+    switch (status) {
+      case "PAID":
+        return "bg-teal-500";
+      case "DUE":
+        return "bg-red-500";
+      default:
+        return "bg-gray-500";
+    }
+  };
+
+    const getStatusColor = (status) => {
+    switch (status) {
+      case "PAID":
+        return "bg-[rgba(42,157,143,0.1)] text-[#2a9d8f]";
+      case "DUE":
+        return "bg-[rgba(231,111,81,0.1)] text-[#e76f51]";
+      default:
+        return "bg-gray-100 text-gray-500";
+    }
+  };
+  const viewUser = (student) => {
+    // Map fields to match what ViewModal expects
+    setSelectedUser({
+      id: student._id,
+      name: student.fullName,
+      guardian: student.guardianName,
+      phone: student.phoneNo,
+      subject: student.subject,
+      dob: student.dob,
+      address: student.address,
+      profileImage: student.profileImage,
+      gender: student.gender,
+      createdAt: student.createdAt,
+    });
+    setIsModalOpen(true);
+  };
   const filteredStudents = students.filter((student) => {
     const matchesSearch =
       (student.fullName &&
@@ -39,7 +79,8 @@ export default function DashboardSection() {
       (student.subject &&
         student.subject.toLowerCase().includes(searchInput.toLowerCase()));
 
-    const matchesGender = genderFilter === "" || student.gender === genderFilter;
+    const matchesGender =
+      genderFilter === "" || student.gender === genderFilter;
 
     return matchesSearch && matchesGender;
   });
@@ -65,7 +106,7 @@ export default function DashboardSection() {
               className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg text-sm focus:outline-none focus:border-teal-500"
             />
           </div>
-          
+
           <div className="w-full sm:w-48">
             <label className="block text-slate-800 font-semibold text-sm mb-2">
               Filter by Gender
@@ -93,9 +134,7 @@ export default function DashboardSection() {
 
             <span className="inline-flex items-center gap-2 px-3 py-1 bg-yellow-100 text-yellow-800 rounded text-sm font-semibold border border-yellow-300 self-start sm:self-auto">
               <CircleAlert className="w-4 h-4 shrink-0" />
-              <span>
-                Tip: Click a student row to reveal more insights.
-              </span>
+              <span>Tip: Click a student row to reveal more insights.</span>
             </span>
           </div>
 
@@ -103,7 +142,7 @@ export default function DashboardSection() {
           <div className="w-full overflow-x-auto">
             <table className="w-full min-w-max">
               <thead className="bg-gray-50">
-                <tr >
+                <tr>
                   <th className="px-6 py-4 text-left font-semibold text-slate-800 text-sm uppercase tracking-wide">
                     Student
                   </th>
@@ -153,6 +192,7 @@ export default function DashboardSection() {
                     <tr
                       key={student._id}
                       className="border-b border-gray-100 hover:bg-gray-50 transition-colors cursor-pointer"
+                      onClick={() => viewUser(student)}
                     >
                       <td className="px-6 py-4 card-hover card-animate">
                         <div className="flex items-center gap-3">
@@ -189,14 +229,11 @@ export default function DashboardSection() {
                       <td className="px-6 py-4 text-gray-600">
                         {formatDate(student.createdAt)}
                       </td>
-                      <td className="px-6 py-4" onClick={(e) => e.stopPropagation()}>
+                      <td
+                        className="px-6 py-4"
+                        onClick={(e) => e.stopPropagation()}
+                      >
                         <div className="flex items-center gap-2">
-                          <button
-                            className="w-8 h-8 rounded-lg bg-blue-100 text-blue-600 hover:scale-110 transition-transform flex items-center justify-center"
-                            title="View"
-                          >
-                            <Eye size={16} />
-                          </button>
                           <button
                             className="w-8 h-8 rounded-lg bg-green-100 text-green-600 hover:scale-110 transition-transform flex items-center justify-center"
                             title="Edit"
@@ -217,8 +254,19 @@ export default function DashboardSection() {
               </tbody>
             </table>
           </div>
+
         </div>
+                            {/* Modal */}
+          {isModalOpen && (
+            <ViewModal
+              selectedUser={selectedUser}
+              setIsModalOpen={setIsModalOpen}
+              getStatusDotColor={getStatusDotColor}
+              getStatusColor={getStatusColor}
+              role="moderator" // Add this line
+            />
+          )}
       </div>
     </ModeratorLayout>
-  )
+  );
 }

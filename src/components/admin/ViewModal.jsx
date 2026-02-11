@@ -46,13 +46,18 @@ function getMonthName(monthNumber) {
   return monthNames[monthNumber - 1] || "N/A";
 }
 
-function ViewModal({ selectedUser, setIsModalOpen, hidePayment }) {
+function ViewModal({ selectedUser, setIsModalOpen, hidePayment, role }) {
+  
+  const isModerator = role === "moderator";
+  hidePayment = hidePayment || isModerator;
+  
   const { get, loading, error } = useHttp();
   const [paymentDetails, setPaymentDetails] = useState(null);
-  const [isStudentDetailsOpen, setIsStudentDetailsOpen] = useState(false);
+  const [isStudentDetailsOpen, setIsStudentDetailsOpen] = useState(isModerator);
   const [isPaymentDetailsOpen, setIsPaymentDetailsOpen] = useState(true);
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
   const [selectedPayment, setSelectedPayment] = useState(null);
+  
 
   // Get current year and month
   const currentYear = new Date().getFullYear();
@@ -104,6 +109,11 @@ function ViewModal({ selectedUser, setIsModalOpen, hidePayment }) {
     }
   };
 
+
+
+  const handleStudentDetailsToggle = () => {
+    if (!isModerator) setIsStudentDetailsOpen((open) => !open);
+  };
   useEffect(() => {
     if (!hidePayment) {
       fetchPaymentDetails();
@@ -140,8 +150,9 @@ function ViewModal({ selectedUser, setIsModalOpen, hidePayment }) {
           {/* Student Details Accordion */}
           <div className="border border-gray-200 rounded-lg mb-3 card-animate">
             <button
-              onClick={() => setIsStudentDetailsOpen(!isStudentDetailsOpen)}
+              onClick={handleStudentDetailsToggle}
               className="w-full flex items-center justify-between p-4 hover:bg-gray-50 transition"
+              disabled={isModerator}
             >
               <span className="font-semibold text-slate-800">Student Details</span>
               <ChevronDown className={`w-5 h-5 transition-transform ${isStudentDetailsOpen ? 'rotate-180' : ''}`} />
