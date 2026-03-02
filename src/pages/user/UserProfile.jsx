@@ -49,9 +49,7 @@ export default function UserProfile() {
     showToast("Copied to clipboard!")
   }
 
-  const handleEditProfile = () => {
-    showToast("Opening profile editor...")
-  }
+
 
   const handleLogout = () => {
     localStorage.removeItem("Token")
@@ -148,7 +146,7 @@ export default function UserProfile() {
           {/* Actions */}
           <div className="grid gap-4">
             <button
-              onClick={handleEditProfile}
+
               className="w-full py-3 md:py-4 rounded-2xl font-semibold flex items-center justify-center gap-2 hover:scale-105 transition cursor-pointer bg-linear-to-br from-[#2a9d8f] to-[#264653] text-white shadow-lg"
             >
               <Edit className="w-5 h-5 md:w-6 md:h-6" /> Edit Profile
