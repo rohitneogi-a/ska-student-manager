@@ -275,7 +275,7 @@ export default function ModeratorProfile() {
           <div className="text-center mb-6 md:mb-8">
             {/* Avatar with camera button */}
             <div className="inline-block relative mb-4 md:mb-6">
-              <div className="w-20 h-20 md:w-24 md:h-24 rounded-3xl overflow-hidden shadow-[0_0_30px_rgba(233,196,106,0.3)] bg-gradient-to-br from-[#e9c46a] to-[#f4a261] flex items-center justify-center">
+              <div className="w-20 h-20 md:w-24 md:h-24 rounded-3xl overflow-hidden shadow-[0_0_30px_rgba(233,196,106,0.3)] bg-linear-to-br from-[#e9c46a] to-[#f4a261] flex items-center justify-center">
                 {profileImage ? (
                   <img
                     src={profileImage}

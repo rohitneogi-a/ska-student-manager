@@ -315,7 +315,7 @@ export default function UserProfile() {
                 ) : null}
                 {/* Fallback initials */}
                 <div
-                  className="w-full h-full bg-gradient-to-br from-[#e9c46a] to-[#f4a261] items-center justify-center"
+                  className="w-full h-full bg-linear-to-br from-[#e9c46a] to-[#f4a261] items-center justify-center"
                   style={{ display: profileImage ? "none" : "flex" }}
                 >
                   <span className="text-xl md:text-2xl font-bold text-gray-800">

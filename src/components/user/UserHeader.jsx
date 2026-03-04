@@ -86,7 +86,7 @@ function UserHeader() {
       <div
         className={`lg:hidden absolute left-0 w-full bg-teal-900/95 backdrop-blur-xl
           transition-all duration-300 overflow-hidden
-          ${mobileMenuOpen ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"}
+          ${mobileMenuOpen ? "max-h-125 opacity-100" : "max-h-0 opacity-0"}
         `}
       >
         <div className="flex flex-col gap-2 p-4 text-white">
