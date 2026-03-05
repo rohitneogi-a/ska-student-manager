@@ -1,10 +1,10 @@
-import { Users, BookOpen } from 'lucide-react'
+import { Users, CircleUserRound } from 'lucide-react'
 
-export default function OverviewCards() {
+export default function OverviewCards({ totalStudents = 0 }) {
   const cards = [
     {
       id: 'total-users',
-      value: '248',
+      value: totalStudents,
       label: 'Total Users',
       icon: Users,
       iconColor: 'text-teal-600',
@@ -12,23 +12,22 @@ export default function OverviewCards() {
     },
     {
       id: 'active-students',
-      value: '186',
+      value: totalStudents,
       label: 'Active Students',
-      icon: BookOpen,
+      icon: CircleUserRound,
       iconColor: 'text-amber-600',
       iconBg: 'bg-amber-100',
     },
   ]
 
   return (
-    <div className="grid grid-cols-2 gap-6 ">
+    <div className="grid grid-cols-2 gap-6">
       {cards.map(card => {
         const Icon = card.icon
-
         return (
           <div
             key={card.id}
-            className= "font-page-title bg-white p-6 rounded-xl shadow-md card-hover card-animate transform hover:shadow-lg "
+            className="font-page-title bg-white p-6 rounded-xl shadow-md card-hover card-animate transform hover:shadow-lg"
           >
             <div className="flex justify-between items-start">
               <div>
@@ -39,7 +38,6 @@ export default function OverviewCards() {
                   {card.label}
                 </div>
               </div>
-
               <div className={`${card.iconBg} p-3 rounded-lg`}>
                 <Icon className={`w-6 h-6 ${card.iconColor}`} />
               </div>

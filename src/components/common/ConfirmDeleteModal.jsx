@@ -1,4 +1,5 @@
 import { AlertCircle } from "lucide-react";
+import { useEffect } from "react";
 
 export function ConfirmDeleteModal({
   isOpen,
@@ -8,6 +9,16 @@ export function ConfirmDeleteModal({
   message = "Are you sure you want to proceed? This action cannot be undone.",
   confirmText = "Delete",
 }) {
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden"
+    } else {
+      document.body.style.overflow = ""
+    }
+    return () => {
+      document.body.style.overflow = ""
+    }
+  }, [isOpen])
   if (!isOpen) return null;
 
   return (
@@ -25,13 +36,13 @@ export function ConfirmDeleteModal({
         <div className="flex gap-3">
           <button
             onClick={onClose}
-            className="flex-1 rounded-lg border-2 border-gray-300 py-2 font-semibold text-gray-700 transition-colors hover:bg-gray-100"
+            className="flex-1 rounded-lg border-2 border-gray-300 py-2 font-semibold text-gray-700 transition-colors hover:bg-gray-100 cursor-pointer"
           >
             Cancel
           </button>
           <button
             onClick={onConfirm}
-            className="flex-1 rounded-lg bg-red-500 py-2 font-semibold text-white transition-colors hover:bg-red-600"
+            className="flex-1 rounded-lg bg-red-500 py-2 font-semibold text-white transition-colors hover:bg-red-600 cursor-pointer"
           >
             {confirmText}
           </button>
