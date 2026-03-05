@@ -140,16 +140,31 @@ function UserDashboard() {
         <div className="w-full">
           <div className="p-3 sm:p-4 md:p-8 max-w-7xl mx-auto">
             {/* Header */}
-            <div className="flex flex-col md:flex-row items-center md:items-center justify-between gap-4 mb-6 md:mb-8 text-center md:text-left">
-              <div>
-                <h3 className="text-xl sm:text-3xl md:text-4xl font-bold text-gray-900 logo-animate">
-                  Hi {userData?.fullName}!
-                </h3>
-                <p className="text-base sm:text-sm text-gray-500 mt-1 logo-animate">
-                  January 2025 - December 2025
-                </p>
-              </div>
+            <div className="flex flex-col md:flex-row items-center md:items-center justify-between gap-4 mb-6 md:mb-8 text-center md:text-left font-page-title">
+          <div className="flex items-center gap-4">
+            <img
+              src={userData?.profileImage}
+              alt={userData?.fullName}
+              className="w-14 h-14 md:w-16 md:h-16 rounded-full object-cover border border-gray-200 shadow"
+              onError={(e) => {
+                e.target.onerror = null
+                e.target.src =
+                  "https://ui-avatars.com/api/?name=" +
+                  encodeURIComponent(userData?.fullName || "M")
+              }}
+            />
+            <div className="text-left">
+              <h3 className="text-xl sm:text-3xl md:text-4xl font-bold text-gray-900 logo-animate">
+                Hi {userData?.fullName}!
+              </h3>
+              
+              
             </div>
+          </div>
+
+          {/* Right side info */}
+          
+        </div>
 
             {/* Stats Cards - Flex */}
             <div className="flex flex-wrap gap-3 sm:gap-4 md:gap-6 mb-6 md:mb-8">
