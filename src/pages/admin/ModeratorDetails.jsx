@@ -425,6 +425,7 @@ function ModeratorDetails() {
                                   "https://ui-avatars.com/api/?name=" +
                                   encodeURIComponent(student.name || "S");
                               }}
+                              loading="lazy"
                             />
                             <span className="text-slate-800 font-medium">
                               {student.name}

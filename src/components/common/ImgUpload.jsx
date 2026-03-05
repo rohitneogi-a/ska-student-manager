@@ -64,6 +64,7 @@ export default function ImgUpload({
                 src={previewUrl}
                 alt="Preview"
                 className="w-28 h-28 rounded-2xl object-cover shadow-md"
+                loading="lazy"
               />
               <p className="text-sm font-semibold text-[#2a9d8f]">{selectedFile?.name}</p>
               <p className="text-xs text-gray-400">

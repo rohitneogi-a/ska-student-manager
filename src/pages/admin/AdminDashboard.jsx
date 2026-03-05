@@ -104,6 +104,7 @@ function AdminDashboard() {
                 alt={adminProfile?.fullName}
                 className="w-16 h-16 rounded-full object-cover border border-gray-200 shadow"
                 onError={e => { e.target.onerror = null; e.target.src = "https://ui-avatars.com/api/?name=" + encodeURIComponent(adminProfile?.fullName || "A") }}
+                loading='lazy'
               />
               <div className="text-left">
                 <h3 className="text-xl sm:text-3xl md:text-4xl font-bold text-gray-900 logo-animate">

@@ -314,6 +314,7 @@ export default function ModeratorUsers() {
                                     "https://ui-avatars.com/api/?name=" +
                                     encodeURIComponent(user.name || "S")
                                 }}
+                                loading="lazy"
                               />
                               <span className="text-slate-800 font-medium">{user.name}</span>
                             </div>

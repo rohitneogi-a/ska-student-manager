@@ -311,6 +311,7 @@ export default function UserProfile() {
                       e.target.style.display = "none"
                       e.target.nextSibling.style.display = "flex"
                     }}
+                    loading="lazy"
                   />
                 ) : null}
                 {/* Fallback initials */}

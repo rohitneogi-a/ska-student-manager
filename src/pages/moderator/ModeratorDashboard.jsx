@@ -101,6 +101,7 @@ export default function DashboardSection() {
                   "https://ui-avatars.com/api/?name=" +
                   encodeURIComponent(moderatorProfile?.fullName || "M")
               }}
+              loading="lazy"
             />
             <div className="text-left">
               <h3 className="text-xl sm:text-3xl md:text-4xl font-bold text-gray-900 logo-animate">
