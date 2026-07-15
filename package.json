@@ -27,6 +27,8 @@
     "india-pincode-search": "^1.0.2",
     "js-cookie": "^3.0.5",
     "jsonwebtoken": "^9.0.3",
+    "jspdf": "^4.2.1",
+    "jspdf-autotable": "^5.0.8",
     "jwt-decode": "^4.0.0",
     "lottie-react": "^2.4.1",
     "lottie-web": "^5.13.0",

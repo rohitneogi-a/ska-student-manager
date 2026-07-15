@@ -7,6 +7,7 @@ const menuItems = [
   ["DashBoard", "/admin/dashboard"],
   ["Moderators", "/admin/moderators"],
   ["Manage Users", "/admin/manage-users"],
+  ["Student Master Data", "/admin/student-master-data"],
   ["Profile", "/admin/profile"],
 
 ]

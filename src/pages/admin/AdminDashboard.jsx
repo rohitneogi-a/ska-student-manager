@@ -81,7 +81,7 @@ function AdminDashboard() {
       value: stats.adminStudents,
       icon: UserCheck,
       color: "bg-blue-100 text-blue-600",
-      onView: () => navigate("/admin/moderators"),
+      onView: () => navigate("/admin/manage-users"),
     },
     {
       title: "Moderator Students",

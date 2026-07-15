@@ -12,6 +12,7 @@ import AdminProfile from "./pages/admin/AdminProfile.jsx";
 import UserPayments from "./pages/user/UserPayments.jsx";
 import ManageModerators from "./pages/admin/ManageModerators.jsx";
 import ManageUsers from "./pages/admin/ManageUsers.jsx";
+import StudentMasterData from "./pages/admin/StudentMasterData.jsx";
 import ModeratorDetails from "./pages/admin/ModeratorDetails.jsx";
 import ModeratorLogin from "./pages/moderator/ModeratorLogin.jsx";
 import ModeratorDashboard from "./pages/moderator/ModeratorDashboard.jsx";
@@ -131,6 +132,14 @@ export default function AppRoutes() {
         element={
           <ProtectedRoute allowedRoles={["admin"]}>
             <AdminProfile />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/student-master-data"
+        element={
+          <ProtectedRoute allowedRoles={["admin"]}>
+            <StudentMasterData />
           </ProtectedRoute>
         }
       />
